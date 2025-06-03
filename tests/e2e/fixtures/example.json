@@ -1,0 +1,15 @@
+{
+  "name": "Vuetify Electron Starter",
+  "description": "A starter template for building cross-platform desktop applications with Vue.js, Vuetify, and Electron.",
+  "features": [
+    "Vue.js 3 and Vuetify 3",
+    "Electron for cross-platform desktop apps",
+    "Pinia for state management",
+    "TypeScript support"
+  ],
+  "testUser": {
+    "username": "testuser",
+    "email": "test@example.com",
+    "password": "Password123!"
+  }
+}

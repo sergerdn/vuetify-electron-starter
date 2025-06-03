@@ -2,6 +2,8 @@
 
 A starter template for building desktop applications with Vue.js, Vuetify, and Electron.
 
+This template is designed to be extended for desktop applications with Electron.
+
 ## Features
 
 - Vue.js 3 and Vuetify 3
@@ -9,10 +11,11 @@ A starter template for building desktop applications with Vue.js, Vuetify, and E
 - Pinia for state management
 - TypeScript support
 - Vite build system
+- Comprehensive testing setup with Vitest and Cypress
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v14 or higher)
+- [Node.js](https://nodejs.org/) (v22 or higher)
 - npm
 
 ## Installation
@@ -47,6 +50,36 @@ npm run electron:dev
 
 ```bash
 npm run electron:build
+```
+
+### Testing
+
+Run unit tests:
+
+```bash
+npm run test
+```
+
+Run E2E tests:
+
+```bash
+npm run test:e2e
+```
+
+## Project Structure
+
+```
+├── public/             # Static assets
+├── src/                # Source code
+│   ├── components/     # Vue components
+│   ├── layouts/        # Page layouts
+│   ├── pages/          # Application pages
+│   ├── plugins/        # Vue plugins
+│   ├── router/         # Vue Router configuration
+│   └── stores/         # Pinia stores
+└── tests/              # Test files
+    ├── e2e/            # End-to-end tests (Cypress)
+    └── unit/           # Unit tests (Vitest)
 ```
 
 ## License
