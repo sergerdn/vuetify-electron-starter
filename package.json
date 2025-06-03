@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.0.0",
+  "main": "out/main/index.js",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -21,7 +22,10 @@
     "test:e2e": "start-server-and-test dev http://localhost:3000 \"cypress run\"",
     "test:e2e:open": "start-server-and-test dev http://localhost:3000 \"cypress open\"",
     "test:all": "npm run test && npm run test:e2e",
-    "ci": "npm run lint && npm run type-check && npm run test:all"
+    "ci": "npm run lint && npm run type-check && npm run test:all",
+    "electron:dev": "electron-vite dev",
+    "electron:build": "electron-vite build && electron-builder",
+    "electron:preview": "electron-vite preview"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.5",
@@ -39,6 +43,9 @@
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.7.0",
     "cypress": "14.4.0",
+    "electron": "36.3.2",
+    "electron-builder": "26.0.12",
+    "electron-vite": "3.1.0",
     "eslint": "9.28.0",
     "eslint-config-prettier": "10.1.5",
     "eslint-config-vuetify": "4.0.0",
