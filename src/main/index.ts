@@ -1,8 +1,9 @@
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { exec } from 'node:child_process';
 
-// Add command line switches before app is ready
+// Add command line switches before the app is ready
 app.commandLine.appendSwitch('--no-sandbox');
 app.commandLine.appendSwitch('--disable-features', 'VizDisplayCompositor');
 
@@ -41,7 +42,7 @@ function createWindow() {
     }
   });
 
-  // Test active push message to Renderer-process.
+  // Test active push message to a Renderer-process.
   win.webContents.on('dom-ready', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString());
   });
@@ -76,6 +77,102 @@ function createWindow() {
     return { action: 'deny' };
   });
 }
+
+// ========== IPC Handlers for OS Integration ==========
+
+// Handler to open URLs in an external browser (Chrome if available)
+ipcMain.handle('open-external-url', async (event, url: string) => {
+  try {
+    console.log('Opening external URL:', url);
+
+    // Try to open with Chrome first (if available), otherwise use default browser
+    if (process.platform === 'win32') {
+      // Windows: Try Chrome first, fallback to default
+      exec(`start chrome "${url}"`, error => {
+        if (error) {
+          console.log('Chrome not found, using default browser');
+          shell.openExternal(url);
+        }
+      });
+    } else if (process.platform === 'darwin') {
+      // macOS: Try Chrome first, fallback to default
+      exec(`open -a "Google Chrome" "${url}"`, error => {
+        if (error) {
+          console.log('Chrome not found, using default browser');
+          shell.openExternal(url);
+        }
+      });
+    } else {
+      // Linux: Try Chrome first, fallback to default
+      exec(`google-chrome "${url}"`, error => {
+        if (error) {
+          console.log('Chrome not found, using default browser');
+          shell.openExternal(url);
+        }
+      });
+    }
+
+    return { success: true, message: 'URL opened successfully' };
+  } catch (error) {
+    console.error('Error opening external URL:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
+    };
+  }
+});
+
+// Handler to get system information
+ipcMain.handle('get-system-info', async () => {
+  try {
+    const systemInfo = {
+      platform: process.platform,
+      arch: process.arch,
+      version: process.version,
+      electronVersion: process.versions.electron,
+      chromeVersion: process.versions.chrome,
+      nodeVersion: process.versions.node,
+      appVersion: app.getVersion(),
+      appName: app.getName()
+    };
+
+    console.log('System info requested:', systemInfo);
+    return { success: true, data: systemInfo };
+  } catch (error) {
+    console.error('Error getting system info:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
+    };
+  }
+});
+
+// Handler to show native notification
+ipcMain.handle('show-notification', async (event, title: string, body: string) => {
+  try {
+    const { Notification } = await import('electron');
+
+    if (Notification.isSupported()) {
+      const notification = new Notification({
+        title,
+        body,
+        icon: path.join(process.env.VITE_PUBLIC || '', 'favicon.ico')
+      });
+
+      notification.show();
+      console.log('Notification shown:', { title, body });
+      return { success: true, message: 'Notification shown' };
+    } else {
+      return { success: false, message: 'Notifications not supported' };
+    }
+  } catch (error) {
+    console.error('Error showing notification:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
+    };
+  }
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

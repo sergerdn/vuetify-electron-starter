@@ -23,6 +23,25 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   // ...
 });
 
+// --------- Expose OS Integration APIs ---------
+contextBridge.exposeInMainWorld('electronAPI', {
+  // Open URL in external browser (Chrome if available)
+  openExternalUrl: (url: string) => ipcRenderer.invoke('open-external-url', url),
+
+  // Get system information
+  getSystemInfo: () => ipcRenderer.invoke('get-system-info'),
+
+  // Show native notification
+  showNotification: (title: string, body: string) =>
+    ipcRenderer.invoke('show-notification', title, body),
+
+  // Check if running in Electron
+  isElectron: true,
+
+  // Get platform info
+  platform: process.platform
+});
+
 // --------- Preload scripts loading ---------
 function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
   return new Promise(resolve => {

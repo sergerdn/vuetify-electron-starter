@@ -10,6 +10,10 @@ template combines the power of modern web technologies with native desktop capab
 - **Electron 36.3.2** Latest stable version for cross-platform desktop apps
 - **electron-vite 3.1.0** Modern build tooling for Electron
 - **electron-builder 26.0.12** Complete solution to package and build Electron apps
+- **OS Integration** IPC communication between renderer and main process
+- **External Browser Control** Open URLs in Chrome or default browser
+- **Native Notifications** System-level notification support
+- **System Information API** Access to platform and version details
 
 ### 🚀 Modern Web Stack
 
