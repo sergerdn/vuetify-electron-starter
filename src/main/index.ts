@@ -2,6 +2,10 @@ import { app, BrowserWindow, shell } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
+// Add command line switches before app is ready
+app.commandLine.appendSwitch('--no-sandbox')
+app.commandLine.appendSwitch('--disable-features', 'VizDisplayCompositor')
+
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // The built directory structure
@@ -28,11 +32,12 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    icon: path.join(process.env.VITE_PUBLIC || '', 'favicon.ico'),
     webPreferences: {
       preload: path.join(dirname, '../preload/index.mjs'),
       nodeIntegration: false,
       contextIsolation: true,
+      sandbox: false, // Disable sandbox for development
     },
   })
 
