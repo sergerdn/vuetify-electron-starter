@@ -19,8 +19,8 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 process.env.APP_ROOT = path.join(dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
-export const MAIN_DIST = path.join(process.env.APP_ROOT, 'out/main')
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'out/renderer')
+export const MAIN_DIST = path.join(process.env.APP_ROOT, 'electron-dist/main')
+export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'electron-dist/renderer')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')

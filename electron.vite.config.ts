@@ -12,13 +12,20 @@ import { resolve } from 'path'
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
+    build: {
+      outDir: 'electron-dist/main'
+    }
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
+    build: {
+      outDir: 'electron-dist/preload'
+    }
   },
   renderer: {
     root: '.',
     build: {
+      outDir: 'electron-dist/renderer',
       rollupOptions: {
         input: resolve(__dirname, 'index.html'),
       },

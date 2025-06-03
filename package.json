@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.0.0",
-  "main": "out/main/index.js",
+  "main": "electron-dist/main/index.js",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -68,5 +68,19 @@
     "vitest": "3.1.4",
     "vue-router": "4.5.1",
     "vue-tsc": "2.2.10"
+  },
+  "build": {
+    "directories": {
+      "buildResources": "resources",
+      "output": "electron-dist"
+    },
+    "files": [
+      "electron-dist/main/**/*",
+      "electron-dist/preload/**/*",
+      "electron-dist/renderer/**/*"
+    ],
+    "extraMetadata": {
+      "main": "electron-dist/main/index.js"
+    }
   }
 }
