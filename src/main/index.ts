@@ -16,7 +16,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 // │ ├─┬ dist
 // │ │ └── index.html
 // │
-process.env.APP_ROOT = path.join(dirname, '..')
+process.env.APP_ROOT = path.join(dirname, '../..')
 
 export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'electron-dist/main')
