@@ -6,8 +6,8 @@
  *
  * Environment Loading Logic:
  * - Development: Loads .env.development (default)
- * - Production: Loads .env.production (when NODE_ENV_APP=production)
- * - Also loads .env.local for local overrides (git-ignored)
+ * - Production: Loads .env.production (when NODE_ENV=production)
+ * - Custom: Loads .env.{NODE_ENV} for any environment
  */
 
 import { config } from 'dotenv';
@@ -62,8 +62,8 @@ export class AppConfig {
 
   // Application Window Configuration
   public readonly window = {
-    width: env.get('VITE_WINDOW_WIDTH').default('1200').asIntPositive(),
-    height: env.get('VITE_WINDOW_HEIGHT').default('800').asIntPositive()
+    width: env.get('VITE_WINDOW_WIDTH').default('1536').asIntPositive(),
+    height: env.get('VITE_WINDOW_HEIGHT').default('864').asIntPositive()
   };
 
   // Application Information

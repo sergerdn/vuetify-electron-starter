@@ -29,3 +29,5 @@ pnpm-debug.log*
 /promt.txt
 /.output.txt
 /commit_message.txt
+/tests/e2e/videos/*
+!/tests/e2e/videos/.gitkeep

@@ -17,8 +17,8 @@ export class BrowserConfig {
 
   // Application Window Configuration
   public readonly window = {
-    width: env.get('VITE_WINDOW_WIDTH').default('1200').asIntPositive(),
-    height: env.get('VITE_WINDOW_HEIGHT').default('800').asIntPositive()
+    width: env.get('VITE_WINDOW_WIDTH').default('1536').asIntPositive(),
+    height: env.get('VITE_WINDOW_HEIGHT').default('864').asIntPositive()
   };
 
   // Application Information

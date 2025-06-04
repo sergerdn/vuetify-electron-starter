@@ -1,14 +1,13 @@
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import vue from '@vitejs/plugin-vue'
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import Fonts from 'unplugin-fonts/vite'
-import Layouts from 'vite-plugin-vue-layouts-next'
-import VueRouter from 'unplugin-vue-router/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import { resolve } from 'path'
-
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+import vue from '@vitejs/plugin-vue';
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import Fonts from 'unplugin-fonts/vite';
+import Layouts from 'vite-plugin-vue-layouts-next';
+import VueRouter from 'unplugin-vue-router/vite';
+import { VueRouterAutoImports } from 'unplugin-vue-router';
+import { resolve } from 'path';
 
 export default defineConfig({
   main: {
@@ -37,13 +36,13 @@ export default defineConfig({
         input: resolve(__dirname, 'index.html'),
         output: {
           // Disable font preloading to avoid MIME type issues in Electron
-          manualChunks: undefined,
+          manualChunks: undefined
         }
       },
       // Disable preload links for fonts to avoid MIME type warnings
       modulePreload: false,
       // Disable asset inlining to prevent font preload issues
-      assetsInlineLimit: 0,
+      assetsInlineLimit: 0
     },
     optimizeDeps: {
       exclude: [
@@ -56,8 +55,8 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        '@': resolve('src'),
-      },
+        '@': resolve('src')
+      }
     },
     plugins: [
       VueRouter({
@@ -116,5 +115,5 @@ export default defineConfig({
         }
       }
     }
-  },
-})
+  }
+});
