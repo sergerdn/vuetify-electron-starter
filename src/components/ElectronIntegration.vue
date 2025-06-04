@@ -1,157 +1,55 @@
 <template>
-  <v-card class="mx-auto" max-width="800">
-    <v-card-title class="d-flex align-center">
-      <v-icon class="me-2" color="primary">mdi-desktop-classic</v-icon>
-      <span>Electron OS Integration</span>
+  <!-- Electron OS Integration Test (moved from HelloWorld) -->
+  <v-card class="py-4" color="primary" rounded="lg" variant="tonal">
+    <v-card-title class="text-center">
+      <v-icon class="me-2">mdi-desktop-classic</v-icon>
+      Electron OS Integration Test
     </v-card-title>
 
-    <v-card-text>
-      <v-alert v-if="!isElectron" type="warning" variant="tonal" class="mb-4">
+    <v-card-text class="text-center">
+      <p class="mb-4">Test communication between Vue app and Electron main process</p>
+
+      <v-btn
+        @click="openGoogleInChrome"
+        :loading="loading"
+        :disabled="!isElectron"
+        color="primary"
+        size="large"
+        class="me-2 mb-2"
+      >
+        <v-icon start>mdi-google-chrome</v-icon>
+        Open Google in Chrome
+      </v-btn>
+
+      <v-btn
+        @click="showSystemInfo"
+        :loading="loadingInfo"
+        :disabled="!isElectron"
+        color="secondary"
+        size="large"
+        class="me-2 mb-2"
+      >
+        <v-icon start>mdi-information</v-icon>
+        Show System Info
+      </v-btn>
+
+      <v-btn
+        @click="sendNotification"
+        :loading="loadingNotification"
+        :disabled="!isElectron"
+        color="success"
+        size="large"
+        class="mb-2"
+      >
+        <v-icon start>mdi-bell</v-icon>
+        Send Notification
+      </v-btn>
+
+      <v-alert v-if="!isElectron" type="warning" variant="tonal" class="mt-4">
         <v-icon>mdi-web</v-icon>
-        Running in web browser. OS integration features are only available in Electron.
+        Running in web browser. OS integration only works in Electron app.
       </v-alert>
 
-      <v-alert v-else type="success" variant="tonal" class="mb-4">
-        <v-icon>mdi-check-circle</v-icon>
-        Running in Electron! OS integration features are available.
-      </v-alert>
-
-      <!-- System Information -->
-      <v-expansion-panels class="mb-4">
-        <v-expansion-panel>
-          <v-expansion-panel-title>
-            <v-icon class="me-2">mdi-information</v-icon>
-            System Information
-          </v-expansion-panel-title>
-          <v-expansion-panel-text>
-            <v-btn
-              @click="getSystemInfo"
-              :loading="loading.systemInfo"
-              color="primary"
-              variant="outlined"
-              class="mb-3"
-            >
-              <v-icon start>mdi-refresh</v-icon>
-              Get System Info
-            </v-btn>
-
-            <v-card v-if="systemInfo" variant="outlined">
-              <v-card-text>
-                <v-row dense>
-                  <v-col v-for="(value, key) in systemInfo" :key="key" cols="6">
-                    <v-chip
-                      :text="`${key}: ${value}`"
-                      variant="outlined"
-                      size="small"
-                      class="mb-1"
-                    />
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-expansion-panel-text>
-        </v-expansion-panel>
-      </v-expansion-panels>
-
-      <!-- External Browser Integration -->
-      <v-card variant="outlined" class="mb-4">
-        <v-card-title>
-          <v-icon class="me-2">mdi-web</v-icon>
-          External Browser Integration
-        </v-card-title>
-        <v-card-text>
-          <p class="text-body-2 mb-3">
-            Open websites in Chrome browser (or default browser if Chrome is not available)
-          </p>
-
-          <v-row>
-            <v-col cols="12" md="8">
-              <v-text-field
-                v-model="urlToOpen"
-                label="Enter URL to open"
-                placeholder="https://example.com"
-                variant="outlined"
-                density="compact"
-                :rules="urlRules"
-              />
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-btn
-                @click="openExternalUrl"
-                :loading="loading.openUrl"
-                :disabled="!isValidUrl || !isElectron"
-                color="primary"
-                block
-                size="large"
-              >
-                <v-icon start>mdi-open-in-new</v-icon>
-                Open in Chrome
-              </v-btn>
-            </v-col>
-          </v-row>
-
-          <v-divider class="my-3" />
-
-          <p class="text-body-2 mb-2">Quick Links:</p>
-          <v-btn-group variant="outlined" density="compact">
-            <v-btn @click="openQuickUrl('https://google.com')" :disabled="!isElectron">
-              <v-icon start>mdi-google</v-icon>
-              Google
-            </v-btn>
-            <v-btn @click="openQuickUrl('https://github.com')" :disabled="!isElectron">
-              <v-icon start>mdi-github</v-icon>
-              GitHub
-            </v-btn>
-            <v-btn @click="openQuickUrl('https://vuetifyjs.com')" :disabled="!isElectron">
-              <v-icon start>mdi-vuetify</v-icon>
-              Vuetify
-            </v-btn>
-          </v-btn-group>
-        </v-card-text>
-      </v-card>
-
-      <!-- Native Notifications -->
-      <v-card variant="outlined">
-        <v-card-title>
-          <v-icon class="me-2">mdi-bell</v-icon>
-          Native Notifications
-        </v-card-title>
-        <v-card-text>
-          <p class="text-body-2 mb-3"> Send native OS notifications from your Electron app </p>
-
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="notification.title"
-                label="Notification Title"
-                variant="outlined"
-                density="compact"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="notification.body"
-                label="Notification Body"
-                variant="outlined"
-                density="compact"
-              />
-            </v-col>
-          </v-row>
-
-          <v-btn
-            @click="showNotification"
-            :loading="loading.notification"
-            :disabled="!notification.title || !notification.body || !isElectron"
-            color="primary"
-            variant="outlined"
-          >
-            <v-icon start>mdi-bell-ring</v-icon>
-            Show Notification
-          </v-btn>
-        </v-card-text>
-      </v-card>
-
-      <!-- Status Messages -->
       <v-alert
         v-if="statusMessage"
         :type="statusMessage.type"
@@ -162,53 +60,36 @@
       >
         {{ statusMessage.text }}
       </v-alert>
+
+      <v-card v-if="systemInfo" variant="outlined" class="mt-4 text-start">
+        <v-card-title>System Information</v-card-title>
+        <v-card-text>
+          <v-chip
+            v-for="(value, key) in systemInfo"
+            :key="key"
+            :text="`${key}: ${value}`"
+            variant="outlined"
+            size="small"
+            class="me-2 mb-2"
+          />
+        </v-card-text>
+      </v-card>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
 
-  // Reactive data
+  // Electron integration reactive data (moved from HelloWorld)
   const isElectron = ref(false);
+  const loading = ref(false);
+  const loadingInfo = ref(false);
+  const loadingNotification = ref(false);
   const systemInfo = ref<Record<string, string> | null>(null);
-  const urlToOpen = ref('https://google.com');
-  const notification = ref({
-    title: 'Hello from Electron!',
-    body: 'This is a native notification from your Electron app.'
-  });
-
-  const loading = ref({
-    systemInfo: false,
-    openUrl: false,
-    notification: false
-  });
-
   const statusMessage = ref<{ type: 'success' | 'error' | 'warning'; text: string } | null>(null);
 
-  // Computed properties
-  const isValidUrl = computed(() => {
-    try {
-      new URL(urlToOpen.value);
-      return true;
-    } catch {
-      return false;
-    }
-  });
-
-  const urlRules = [
-    (v: string) => !!v || 'URL is required',
-    (v: string) => {
-      try {
-        new URL(v);
-        return true;
-      } catch {
-        return 'Please enter a valid URL';
-      }
-    }
-  ];
-
-  // Methods
+  // Helper function to show status messages (moved from HelloWorld)
   const showStatus = (type: 'success' | 'error' | 'warning', text: string) => {
     statusMessage.value = { type, text };
     setTimeout(() => {
@@ -216,90 +97,82 @@
     }, 5000);
   };
 
-  const getSystemInfo = async () => {
+  // OS Integration functions (moved from HelloWorld)
+  const openGoogleInChrome = async () => {
     if (!window.electronAPI) {
       showStatus('error', 'Electron API not available');
       return;
     }
 
-    loading.value.systemInfo = true;
+    loading.value = true;
+    try {
+      const result = await window.electronAPI.openExternalUrl('https://google.com');
+      if (result.success) {
+        showStatus('success', 'Google opened in Chrome browser!');
+      } else {
+        showStatus('error', result.message || 'Failed to open Google');
+      }
+    } catch (error) {
+      showStatus('error', `Error: ${error}`);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const showSystemInfo = async () => {
+    if (!window.electronAPI) {
+      showStatus('error', 'Electron API not available');
+      return;
+    }
+
+    loadingInfo.value = true;
     try {
       const result = await window.electronAPI.getSystemInfo();
       if (result.success && result.data) {
         systemInfo.value = result.data;
-        showStatus('success', 'System information retrieved successfully');
+        showStatus('success', 'System information retrieved!');
       } else {
-        showStatus('error', result.message || 'Failed to get system information');
+        showStatus('error', result.message || 'Failed to get system info');
       }
     } catch (error) {
       showStatus('error', `Error: ${error}`);
     } finally {
-      loading.value.systemInfo = false;
+      loadingInfo.value = false;
     }
   };
 
-  const openExternalUrl = async () => {
-    if (!window.electronAPI || !isValidUrl.value) return;
-
-    loading.value.openUrl = true;
-    try {
-      const result = await window.electronAPI.openExternalUrl(urlToOpen.value);
-      if (result.success) {
-        showStatus('success', `Opened ${urlToOpen.value} in external browser`);
-      } else {
-        showStatus('error', result.message || 'Failed to open URL');
-      }
-    } catch (error) {
-      showStatus('error', `Error: ${error}`);
-    } finally {
-      loading.value.openUrl = false;
+  const sendNotification = async () => {
+    if (!window.electronAPI) {
+      showStatus('error', 'Electron API not available');
+      return;
     }
-  };
 
-  const openQuickUrl = async (url: string) => {
-    if (!window.electronAPI) return;
-
-    try {
-      const result = await window.electronAPI.openExternalUrl(url);
-      if (result.success) {
-        showStatus('success', `Opened ${url} in external browser`);
-      } else {
-        showStatus('error', result.message || 'Failed to open URL');
-      }
-    } catch (error) {
-      showStatus('error', `Error: ${error}`);
-    }
-  };
-
-  const showNotification = async () => {
-    if (!window.electronAPI) return;
-
-    loading.value.notification = true;
+    loadingNotification.value = true;
     try {
       const result = await window.electronAPI.showNotification(
-        notification.value.title,
-        notification.value.body
+        'Hello from Electron!',
+        'This is a test notification from your Vue + Electron app!'
       );
       if (result.success) {
-        showStatus('success', 'Notification sent successfully');
+        showStatus('success', 'Notification sent successfully!');
       } else {
-        showStatus('error', result.message || 'Failed to show notification');
+        showStatus('error', result.message || 'Failed to send notification');
       }
     } catch (error) {
       showStatus('error', `Error: ${error}`);
     } finally {
-      loading.value.notification = false;
+      loadingNotification.value = false;
     }
   };
 
-  // Lifecycle
+  // Check if running in Electron on component mount (moved from HelloWorld)
   onMounted(() => {
-    // Check if running in Electron
     isElectron.value = !!window.electronAPI?.isElectron;
 
-    // Auto-load system info if in Electron
     if (isElectron.value) {
-      getSystemInfo();
+      console.log('🎉 Running in Electron! OS integration features available.');
+    } else {
+      console.log('🌐 Running in web browser. OS integration features disabled.');
     }
   });
 </script>
