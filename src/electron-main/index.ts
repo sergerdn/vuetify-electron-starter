@@ -11,8 +11,8 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // The built directory structure
 //
-// ├─┬─┬ out
-// │ │ └── main.js
+// ├─┬─┬ build-electron
+// │ │ └── electron-main.js
 // │ │
 // │ ├─┬ renderer
 // │ │ └── index.html
@@ -20,8 +20,8 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(dirname, '../..');
 
 export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
-export const MAIN_DIST = path.join(process.env.APP_ROOT, 'out/main');
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'out/renderer');
+export const MAIN_DIST = path.join(process.env.APP_ROOT, 'build-electron/electron-main');
+export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'build-electron/renderer');
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
@@ -35,7 +35,7 @@ function createWindow() {
     height: 800,
     icon: path.join(process.env.VITE_PUBLIC || '', 'favicon.ico'),
     webPreferences: {
-      preload: path.join(dirname, '../preload/index.mjs'),
+      preload: path.join(dirname, '../electron-preload/index.mjs'),
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: false // Disable sandbox for development

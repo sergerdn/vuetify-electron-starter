@@ -1,9 +1,11 @@
 {
   "name": "vuetify-electron-starter",
+  "description": "A modern Electron application built with Vue 3, Vuetify, and TypeScript",
+  "author": "Your Name <your.email@example.com>",
   "private": true,
   "type": "module",
   "version": "0.0.1",
-  "main": "./out/main/index.js",
+  "main": "./build-electron/electron-main/index.js",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -68,5 +70,58 @@
     "vitest": "3.2.1",
     "vue-router": "4.5.1",
     "vue-tsc": "2.2.10"
+  },
+  "build": {
+    "appId": "com.vuetify.electron.starter",
+    "productName": "Vuetify Electron Starter",
+    "directories": {
+      "output": "dist-electron",
+      "buildResources": "build-resources"
+    },
+    "files": [
+      "build-electron/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "./build-electron/electron-main/index.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Utility"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "your-username",
+      "repo": "vuetify-electron-starter"
+    }
   }
 }

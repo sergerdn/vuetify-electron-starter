@@ -149,11 +149,12 @@ npm run test:e2e
 ├── tests/                     # Test files
 │   ├── e2e/                   # End-to-end tests (Cypress)
 │   └── unit/                  # Unit tests (Vitest)
-├── out/                       # Compiled Electron files
-│   ├── main/                  # Compiled main process
-│   ├── preload/               # Compiled preload scripts
+├── build-electron/            # Compiled Electron files
+│   ├── electron-main/         # Compiled main process
+│   ├── electron-preload/      # Compiled preload scripts
 │   └── renderer/              # Compiled renderer (Vue app)
-├── dist/                      # Built Electron application
+├── dist-electron/             # Built Electron application (final distributables)
+├── build-resources/           # Build resources (icons, etc.)
 ├── electron.vite.config.ts    # Electron-Vite configuration
 ├── vite.config.ts             # Vite configuration
 └── package.json               # Dependencies and scripts
@@ -164,13 +165,14 @@ npm run test:e2e
 ### Electron Configuration
 
 - **`electron.vite.config.ts`** - Main configuration for electron-vite build tool
-- **`src/main/index.ts`** - Electron main process with window management
-- **`src/preload/index.ts`** - Secure preload script for renderer communication
+- **`src/electron-main/index.ts`** - Electron main process with window management
+- **`src/electron-preload/index.ts`** - Secure preload script for renderer communication
 
 ### Build Configuration
 
 - **`vite.config.ts`** - Vite configuration for the renderer process
 - **`package.json`** - Contains electron-builder configuration and scripts
+- **`build-resources/`** - Contains icons and other build assets for electron-builder
 
 ## 📋 Available Scripts
 
