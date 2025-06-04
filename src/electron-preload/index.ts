@@ -25,7 +25,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 // --------- Expose OS Integration APIs ---------
 contextBridge.exposeInMainWorld('electronAPI', {
-  // Open URL in external browser (Chrome if available)
+  // Open URL in an external browser (Chrome if available)
   openExternalUrl: (url: string) => ipcRenderer.invoke('open-external-url', url),
 
   // Get system information
@@ -74,17 +74,17 @@ function useLoading() {
   const className = `loaders-css__square-spin`;
   const styleContent = `
 @keyframes square-spin {
-  25% { 
-    transform: perspective(100px) rotateX(180deg) rotateY(0); 
+  25% {
+    transform: perspective(100px) rotateX(180deg) rotateY(0);
   }
-  50% { 
-    transform: perspective(100px) rotateX(180deg) rotateY(180deg); 
+  50% {
+    transform: perspective(100px) rotateX(180deg) rotateY(180deg);
   }
-  75% { 
-    transform: perspective(100px) rotateX(0) rotateY(180deg); 
+  75% {
+    transform: perspective(100px) rotateX(0) rotateY(180deg);
   }
-  100% { 
-    transform: perspective(100px) rotateX(0) rotateY(0); 
+  100% {
+    transform: perspective(100px) rotateX(0) rotateY(0);
   }
 }
 .${className} > div {

@@ -1,13 +1,13 @@
 # Vuetify Electron Starter
 
-A modern starter template for building cross-platform desktop applications with Vue.js 3, Vuetify 3, and Electron. This
-template combines the power of modern web technologies with native desktop capabilities.
+A modern starter template for building Windows desktop applications with Vue.js 3, Vuetify 3, and Electron. This
+template combines the power of modern web technologies with native Windows desktop capabilities.
 
 ## ✨ Features
 
 ### 🖥️ Desktop Application
 
-- **Electron 36.3.2** Latest stable version for cross-platform desktop apps
+- **Electron 36.3.2** Latest stable version for Windows desktop apps
 - **electron-vite 3.1.0** Modern build tooling for Electron
 - **electron-builder 26.0.12** Complete solution to package and build Electron apps
 - **OS Integration** IPC communication between renderer and main process
@@ -35,7 +35,8 @@ template combines the power of modern web technologies with native desktop capab
 - **Hot Module Replacement** - Instant updates during development
 - **DevTools Integration** - Built-in debugging capabilities
 - **Modern Security** Context isolation and secure preload scripts
-- **Auto-updater Ready** - Built-in support for application updates
+- **Auto-updater Ready** - Built-in support for application updates (optional)
+- **Icon Integration** - Automatic Windows icon support with a build process
 
 ## Prerequisites
 
@@ -104,9 +105,8 @@ This will:
 
 **Output:**
 
-- `dist/vuetify-electron-starter Setup 0.0.1.exe` - Windows installer
-- `dist/win-unpacked/` - Unpacked application folder
-- `dist/win-unpacked/vuetify-electron-starter.exe` - Executable file
+- `dist-electron/win-unpacked/` - Unpacked Windows application folder
+- `dist-electron/win-unpacked/Vuetify Electron Starter.exe` - Windows executable with custom icon
 
 ### Preview Built Application
 
@@ -135,9 +135,9 @@ npm run test:e2e
 ```
 ├── public/                     # Static assets
 ├── src/                        # Source code
-│   ├── main/                   # Electron main process
+│   ├── electron-main/          # Electron main process (Windows-focused)
 │   │   └── index.ts           # Main process entry point
-│   ├── preload/               # Electron preload scripts
+│   ├── electron-preload/       # Electron preload scripts
 │   │   ├── index.ts           # Preload script
 │   │   └── types.d.ts         # TypeScript definitions
 │   ├── components/            # Vue components
@@ -149,11 +149,12 @@ npm run test:e2e
 ├── tests/                     # Test files
 │   ├── e2e/                   # End-to-end tests (Cypress)
 │   └── unit/                  # Unit tests (Vitest)
-├── out/                       # Compiled Electron files
-│   ├── main/                  # Compiled main process
-│   ├── preload/               # Compiled preload scripts
+├── build-electron/            # Compiled Electron files
+│   ├── electron-main/         # Compiled main process
+│   ├── electron-preload/      # Compiled preload scripts
 │   └── renderer/              # Compiled renderer (Vue app)
-├── dist/                      # Built Electron application
+├── dist-electron/             # Built Windows application
+├── build-resources/           # Build assets (icons, etc.)
 ├── electron.vite.config.ts    # Electron-Vite configuration
 ├── vite.config.ts             # Vite configuration
 └── package.json               # Dependencies and scripts
@@ -164,8 +165,8 @@ npm run test:e2e
 ### Electron Configuration
 
 - **`electron.vite.config.ts`** - Main configuration for electron-vite build tool
-- **`src/main/index.ts`** - Electron main process with window management
-- **`src/preload/index.ts`** - Secure preload script for renderer communication
+- **`src/electron-main/index.ts`** - Electron main process with Windows-focused functionality
+- **`src/electron-preload/index.ts`** - Secure preload script for renderer communication
 
 ### Build Configuration
 
@@ -204,23 +205,38 @@ npm run test:e2e
 - **Renderer Process**: Automatic hot reload via Vite
 - **Main/Preload Process**: Automatic restart when files change
 
-### Building for Different Platforms
+### Windows-Only Configuration
 
-The current configuration builds for Windows. To build for other platforms, modify the electron-builder configuration in
-`package.json`:
+This project is configured specifically for Windows development:
 
 ```json
 {
   "build": {
-    "mac": {
-      "target": "dmg"
-    },
-    "linux": {
-      "target": "AppImage"
+    "win": {
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build-resources/v-logo.ico",
+      "artifactName": "${productName}-${version}-${arch}"
     }
   }
 }
 ```
+
+### Customizing Application Icon
+
+The application includes automatic icon integration:
+
+1. **Replace the icon**: Add your custom `icon.ico` file to `build-resources/` (currently using `v-logo.ico`)
+2. **Build the app**: Run `npm run electron:build`
+3. **Verify**: Check the executable in `dist-electron/win-unpacked/`
+
+For detailed icon requirements and creation guides, see [build-resources/README.md](./build-resources/README.md).
 
 ### Security Best Practices
 
@@ -311,9 +327,46 @@ If you see a black screen when running the built Electron app:
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+3. Commit your changes using [Conventional Commits](https://www.conventionalcommits.org/):
+   ```bash
+   git commit -m 'feat: add amazing feature'
+   git commit -m 'fix: resolve issue with component'
+   git commit -m 'docs: update README with new instructions'
+   ```
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+### Commit Message Format
+
+This project follows [the Conventional Commits](https://www.conventionalcommits.org/) specification:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Changes to the build process or auxiliary tools
+
+**Examples:**
+
+```bash
+feat(electron): add auto-updater functionality
+fix(renderer): resolve routing issue in production
+docs(readme): add installation instructions
+chore(deps): update electron to latest version
+```
 
 ## License
 

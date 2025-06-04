@@ -1,9 +1,11 @@
 {
   "name": "vuetify-electron-starter",
+  "description": "A modern Electron application built with Vue 3, Vuetify, and TypeScript",
+  "author": "sergerdn",
   "private": true,
   "type": "module",
   "version": "0.0.1",
-  "main": "./out/main/index.js",
+  "main": "./build-electron/electron-main/index.js",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -25,7 +27,8 @@
     "ci": "npm run lint && npm run type-check && npm run test:all",
     "electron:dev": "electron-vite dev",
     "electron:build": "electron-vite build && electron-builder",
-    "electron:preview": "electron-vite preview"
+    "electron:preview": "electron-vite preview",
+    "electron:pack": "electron-vite build && electron-builder --dir"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.5",
@@ -68,5 +71,60 @@
     "vitest": "3.2.1",
     "vue-router": "4.5.1",
     "vue-tsc": "2.2.10"
+  },
+  "build": {
+    "appId": "com.vuetify.electron.starter",
+    "productName": "VuetifyElectronStarter",
+    "copyright": "Copyright © 2025 ${author}",
+    "electronVersion": "36.3.2",
+    "directories": {
+      "output": "dist-electron",
+      "buildResources": "build-resources"
+    },
+    "files": [
+      "build-electron/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "!node_modules/**/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!node_modules/**/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/**/*.d.ts",
+      "!node_modules/**/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "extraMetadata": {
+      "main": "./build-electron/electron-main/index.js"
+    },
+    "compression": "maximum",
+    "removePackageScripts": true,
+    "nodeGypRebuild": false,
+    "buildDependenciesFromSource": false,
+    "win": {
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build-resources/v-logo.ico",
+      "artifactName": "${productName}-${version}-${arch}",
+      "requestedExecutionLevel": "asInvoker",
+      "verifyUpdateCodeSignature": false
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "sergerdn",
+        "repo": "vuetify-electron-starter",
+        "releaseType": "release"
+      }
+    ]
   }
 }

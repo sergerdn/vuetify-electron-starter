@@ -7,7 +7,7 @@ export interface IElectronAPI {
 
 // OS Integration API Types
 export interface ElectronAPI {
-  // Open URL in external browser (Chrome if available)
+  // Open URL in an external browser (Chrome if available)
   openExternalUrl: (url: string) => Promise<{ success: boolean; message: string }>;
 
   // Get system information

@@ -14,19 +14,25 @@ export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
     build: {
-      outDir: 'out/main'
+      outDir: 'build-electron/electron-main',
+      rollupOptions: {
+        input: resolve(__dirname, 'src/electron-main/index.ts')
+      }
     }
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
     build: {
-      outDir: 'out/preload'
+      outDir: 'build-electron/electron-preload',
+      rollupOptions: {
+        input: resolve(__dirname, 'src/electron-preload/index.ts')
+      }
     }
   },
   renderer: {
     root: '.',
     build: {
-      outDir: 'out/renderer',
+      outDir: 'build-electron/renderer',
       rollupOptions: {
         input: resolve(__dirname, 'index.html'),
         output: {

@@ -1,8 +1,8 @@
 
 clean:
-		if [ -d "dist" ]; then rm -rf dist; fi
+		if [ -d "dist-electron" ]; then rm -rf dist-electron; fi
 		if [ -d "coverage" ]; then rm -rf coverage; fi
-		if [ -d "out" ]; then rm -rf coverage; fi
+		if [ -d "build-electron" ]; then rm -rf build-electron; fi
 
 switch_develop:
 		git fetch && git checkout develop && git pull
