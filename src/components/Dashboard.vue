@@ -28,11 +28,16 @@
 
             <template #subtitle>
               <div class="text-subtitle-1">
-                Change this page by updating <v-kbd>{{ `<HelloWorld />` }}</v-kbd> in
-                <v-kbd>components/HelloWorld.vue</v-kbd>.
+                Change this page by updating
+                <v-kbd>components/Dashboard.vue</v-kbd>
               </div>
             </template>
           </v-card>
+        </v-col>
+
+        <!-- Playwright Browser Automation -->
+        <v-col cols="12">
+          <PlaywrightIntegration />
         </v-col>
 
         <!-- Electron OS Integration -->

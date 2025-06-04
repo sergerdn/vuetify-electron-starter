@@ -34,6 +34,7 @@
     "@fontsource/roboto": "5.2.5",
     "@mdi/font": "7.4.47",
     "env-var": "7.5.0",
+    "playwright": "^1.52.0",
     "vue": "3.5.16",
     "vuetify": "3.8.8"
   },
@@ -97,7 +98,12 @@
       "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
       "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
-      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!**/node_modules/fsevents/**/*",
+      "!**/node_modules/@parcel/watcher-darwin*/**/*",
+      "!**/node_modules/@parcel/watcher-linux*/**/*",
+      "!**/node_modules/@esbuild/darwin*/**/*",
+      "!**/node_modules/@esbuild/linux*/**/*"
     ],
     "extraMetadata": {
       "main": "./build-electron/electron-main/index.js"
@@ -106,6 +112,10 @@
     "removePackageScripts": true,
     "nodeGypRebuild": false,
     "buildDependenciesFromSource": false,
+    "npmRebuild": false,
+    "asarUnpack": [
+      "**/node_modules/playwright/**/*"
+    ],
     "win": {
       "target": [
         {

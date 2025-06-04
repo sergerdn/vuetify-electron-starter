@@ -34,6 +34,54 @@ export interface ElectronAPI {
 
   // Get platform info
   platform: string;
+
+  // Playwright browser automation APIs
+  launchBrowser: (browser: 'chrome' | 'firefox', url: string) => Promise<{
+    success: boolean;
+    message: string;
+    processId?: number;
+    cdpPort?: number;
+    cdpUrl?: string;
+  }>;
+
+  // Get available browsers
+  getAvailableBrowsers: () => Promise<{
+    success: boolean;
+    browsers: Array<{
+      name: 'chrome' | 'firefox';
+      displayName: string;
+      available: boolean;
+    }>;
+  }>;
+
+  // Close the browser process
+  closeBrowser: (processId: number) => Promise<{ success: boolean; message: string }>;
+
+  // Get active browser sessions
+  getActiveSessions: () => Promise<{
+    success: boolean;
+    sessions: Array<{
+      processId: number;
+      browserType: 'chrome' | 'firefox';
+      url: string;
+      cdpPort: number;
+      startTime: Date;
+    }>;
+  }>;
+
+  // Get session details
+  getSessionDetails: (processId: number) => Promise<{
+    success: boolean;
+    session?: {
+      processId: number;
+      browserType: 'chrome' | 'firefox';
+      url: string;
+      cdpPort: number;
+      cdpUrl: string;
+      startTime: Date;
+    };
+    message?: string;
+  }>;
 }
 
 declare global {

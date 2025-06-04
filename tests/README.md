@@ -8,10 +8,10 @@ The testing setup includes both unit/component tests with Vitest and end-to-end 
 
 ```
 tests/
-├── unit/              # Unit and component tests with Vitest
+├── unit/                  # Unit and component tests with Vitest
 │   ├── example.spec.ts    # Basic unit test examples
 │   └── component.spec.ts  # Vue component test examples
-└── e2e/               # End-to-end tests with Cypress
+└── e2e/                   # End-to-end tests with Cypress
     ├── fixtures/          # Test data for E2E tests
     │   └── example.json   # Sample test data
     ├── support/           # Support files for Cypress
@@ -63,7 +63,7 @@ npm run test:e2e:open
 Unit tests are written using Vitest. See `tests/unit/example.spec.ts` for basic examples.
 
 ```typescript
-import { describe, it, expect } from 'vitest';
+import {describe, it, expect} from 'vitest';
 
 describe('Example Test Suite', () => {
   it('should pass a simple assertion', () => {
@@ -77,8 +77,8 @@ describe('Example Test Suite', () => {
 Component tests use Vitest with @vue/test-utils. See `tests/unit/component.spec.ts` for examples.
 
 ```typescript
-import { mount } from '@vue/test-utils';
-import { describe, it, expect } from 'vitest';
+import {mount} from '@vue/test-utils';
+import {describe, it, expect} from 'vitest';
 import YourComponent from '@/components/YourComponent.vue';
 
 describe('YourComponent', () => {
