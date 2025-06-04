@@ -33,6 +33,7 @@
   "dependencies": {
     "@fontsource/roboto": "5.2.5",
     "@mdi/font": "7.4.47",
+    "env-var": "^7.5.0",
     "vue": "3.5.16",
     "vuetify": "3.8.7"
   },

@@ -6,7 +6,8 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "electron.vite.config.*"
+    "electron.vite.config.*",
+    "src/config/AppConfig.ts"
   ],
   "compilerOptions": {
     "composite": true,

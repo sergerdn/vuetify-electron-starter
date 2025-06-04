@@ -10,10 +10,11 @@ import 'vuetify/styles';
 
 // Composables
 import { createVuetify } from 'vuetify';
+import { appConfig } from '@/config';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark'
+    defaultTheme: appConfig.theme.default
   }
 });

@@ -2,6 +2,10 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { exec } from 'node:child_process';
+import { AppConfig } from '../config/AppConfig.js';
+
+// Create config instance
+const appConfig = new AppConfig();
 
 // Add command line switches before the app is ready
 app.commandLine.appendSwitch('--no-sandbox');
@@ -31,8 +35,8 @@ let win: BrowserWindow | null;
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: appConfig.window.width,
+    height: appConfig.window.height,
     icon: path.join(process.env.VITE_PUBLIC || '', 'favicon.ico'),
     webPreferences: {
       preload: path.join(dirname, '../electron-preload/index.mjs'),
@@ -58,17 +62,17 @@ function createWindow() {
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
-    win.webContents.openDevTools();
-  } else if (process.env.NODE_ENV === 'development') {
-    // In development mode, try to connect to the Vite dev server
-    win.loadURL('http://localhost:3000');
-    win.webContents.openDevTools();
   } else {
     const indexPath = path.join(RENDERER_DIST, 'index.html');
     console.log('Loading file:', indexPath);
     win.loadFile(indexPath).catch(err => {
       console.error('Failed to load file:', err);
     });
+  }
+
+  // Open DevTools if configured (environment-agnostic)
+  if (appConfig.development.openDevTools) {
+    win.webContents.openDevTools();
   }
 
   // Make all links open with the browser, not with the application
