@@ -13,6 +13,10 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 // Utilities
 import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
+import { AppConfig } from './src/config/AppConfig';
+
+// Create config instance
+const appConfig = new AppConfig();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -77,7 +81,8 @@ export default defineConfig({
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue']
   },
   server: {
-    port: 3000
+    port: appConfig.server.port,
+    host: appConfig.server.host
   },
   css: {
     preprocessorOptions: {
@@ -92,10 +97,20 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
+    setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
     },
-    include: ['tests/unit/**/*.{test,spec}.{js,ts}', 'src/**/*.{test,spec}.{js,ts}'],
+    include: [
+      'tests/unit/**/*.{test,spec}.{js,ts}',
+      'tests/integration/**/*.{test,spec}.{js,ts}',
+      'src/**/*.{test,spec}.{js,ts}'
+    ],
+    exclude: [
+      'tests/functional/**/*',
+      'tests/fixtures/**/*',
+      'tests/helpers/**/*'
+    ]
   }
 });

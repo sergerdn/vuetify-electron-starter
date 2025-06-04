@@ -5,6 +5,8 @@ node_modules
 /build-electron
 
 # local env files
+/.env.production
+.env.development
 .env.local
 .env.*.local
 
@@ -27,3 +29,5 @@ pnpm-debug.log*
 /promt.txt
 /.output.txt
 /commit_message.txt
+/tests/e2e/videos/*
+!/tests/e2e/videos/.gitkeep

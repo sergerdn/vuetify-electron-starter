@@ -1,4 +1,7 @@
 
+tests_all:
+		npm run test:all
+
 clean:
 		if [ -d "dist-electron" ]; then rm -rf dist-electron; fi
 		if [ -d "coverage" ]; then rm -rf coverage; fi

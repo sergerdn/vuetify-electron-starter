@@ -7,9 +7,9 @@ template combines the power of modern web technologies with native Windows deskt
 
 ### 🖥️ Desktop Application
 
-- **Electron 36.3.2** Latest stable version for Windows desktop apps
-- **electron-vite 3.1.0** Modern build tooling for Electron
-- **electron-builder 26.0.12** Complete solution to package and build Electron apps
+- **Electron** Latest stable version for Windows desktop apps
+- **electron-vite** Modern build tooling for Electron
+- **electron-builder** Complete solution to package and build Electron apps
 - **OS Integration** IPC communication between renderer and main process
 - **External Browser Control** Open URLs in Chrome or default browser
 - **Native Notifications** System-level notification support
@@ -19,7 +19,7 @@ template combines the power of modern web technologies with native Windows deskt
 
 - **Vue.js 3** Progressive JavaScript framework with Composition API
 - **Vuetify 3** Material Design component framework
-- **Vite 6.3.5** Next generation frontend tooling
+- **Vite** Next generation frontend tooling
 - **TypeScript** Full TypeScript support throughout the project
 - **Pinia** - Intuitive state management for Vue
 
