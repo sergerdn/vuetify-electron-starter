@@ -24,3 +24,6 @@ pnpm-debug.log*
 *.sw?
 /coverage/
 /.research/
+/promt.txt
+/.output.txt
+/commit_message.txt

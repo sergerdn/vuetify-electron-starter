@@ -1,7 +1,7 @@
 {
   "name": "vuetify-electron-starter",
   "description": "A modern Electron application built with Vue 3, Vuetify, and TypeScript",
-  "author": "Your Name <your.email@example.com>",
+  "author": "sergerdn",
   "private": true,
   "type": "module",
   "version": "0.0.1",
@@ -27,7 +27,8 @@
     "ci": "npm run lint && npm run type-check && npm run test:all",
     "electron:dev": "electron-vite dev",
     "electron:build": "electron-vite build && electron-builder",
-    "electron:preview": "electron-vite preview"
+    "electron:preview": "electron-vite preview",
+    "electron:pack": "electron-vite build && electron-builder --dir"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.5",
@@ -73,7 +74,9 @@
   },
   "build": {
     "appId": "com.vuetify.electron.starter",
-    "productName": "Vuetify Electron Starter",
+    "productName": "VuetifyElectronStarter",
+    "copyright": "Copyright © 2025 ${author}",
+    "electronVersion": "36.3.2",
     "directories": {
       "output": "dist-electron",
       "buildResources": "build-resources"
@@ -81,47 +84,47 @@
     "files": [
       "build-electron/**/*",
       "node_modules/**/*",
-      "package.json"
+      "package.json",
+      "!node_modules/**/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!node_modules/**/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/**/*.d.ts",
+      "!node_modules/**/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
     "extraMetadata": {
       "main": "./build-electron/electron-main/index.js"
     },
+    "compression": "maximum",
+    "removePackageScripts": true,
+    "nodeGypRebuild": false,
+    "buildDependenciesFromSource": false,
     "win": {
       "target": [
         {
-          "target": "nsis",
-          "arch": ["x64"]
-        }
-      ]
-    },
-    "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
         }
       ],
-      "category": "public.app-category.productivity"
+      "icon": "build-resources/v-logo.ico",
+      "artifactName": "${productName}-${version}-${arch}",
+      "requestedExecutionLevel": "asInvoker",
+      "verifyUpdateCodeSignature": false
     },
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": ["x64"]
-        }
-      ],
-      "category": "Utility"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "your-username",
-      "repo": "vuetify-electron-starter"
-    }
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "sergerdn",
+        "repo": "vuetify-electron-starter",
+        "releaseType": "release"
+      }
+    ]
   }
 }

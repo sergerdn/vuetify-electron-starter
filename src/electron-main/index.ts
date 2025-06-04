@@ -85,32 +85,13 @@ ipcMain.handle('open-external-url', async (event, url: string) => {
   try {
     console.log('Opening external URL:', url);
 
-    // Try to open with Chrome first (if available), otherwise use default browser
-    if (process.platform === 'win32') {
-      // Windows: Try Chrome first, fallback to default
-      exec(`start chrome "${url}"`, error => {
-        if (error) {
-          console.log('Chrome not found, using default browser');
-          shell.openExternal(url);
-        }
-      });
-    } else if (process.platform === 'darwin') {
-      // macOS: Try Chrome first, fallback to default
-      exec(`open -a "Google Chrome" "${url}"`, error => {
-        if (error) {
-          console.log('Chrome not found, using default browser');
-          shell.openExternal(url);
-        }
-      });
-    } else {
-      // Linux: Try Chrome first, fallback to default
-      exec(`google-chrome "${url}"`, error => {
-        if (error) {
-          console.log('Chrome not found, using default browser');
-          shell.openExternal(url);
-        }
-      });
-    }
+    // Windows: Try Chrome first, fallback to the default browser
+    exec(`start chrome "${url}"`, error => {
+      if (error) {
+        console.log('Chrome not found, using default browser');
+        shell.openExternal(url);
+      }
+    });
 
     return { success: true, message: 'URL opened successfully' };
   } catch (error) {
@@ -179,24 +160,12 @@ ipcMain.handle('show-notification', async (event, title: string, body: string) =
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-
-  app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Quit when all windows are closed (Windows behavior)
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-    win = null;
-  }
+  app.quit();
+  win = null;
 });
 
 // In this file you can include the rest of your app's specific main process
