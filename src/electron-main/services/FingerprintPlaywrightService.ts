@@ -1,5 +1,7 @@
 import { plugin } from 'playwright-with-fingerprints';
 import type { Browser, BrowserContext, Page } from 'playwright';
+import path from 'path';
+import { AppConfig } from '../../config/AppConfig.js';
 
 export interface FingerprintBrowserSession {
   processId: number;
@@ -37,9 +39,36 @@ export class FingerprintPlaywrightService {
   private activeBrowsers = new Map<number, FingerprintBrowserSession>();
   private processIdCounter = 1;
   private serviceKey = '';
+  private appConfig: AppConfig;
 
   constructor() {
+    this.appConfig = new AppConfig();
+    this.setupWorkingFolder();
     console.log('🔒 FingerprintPlaywrightService initialized');
+  }
+
+  /**
+   * Setup the working folder for playwright-with-fingerprints engine
+   */
+  private setupWorkingFolder(): void {
+    try {
+      // Get the working folder from configuration
+      const workingFolder = this.appConfig.playwrightFingerprints.workingFolder;
+
+      // Resolve the path relative to the application root
+      const resolvedPath = path.resolve(process.cwd(), workingFolder);
+
+      // Set the working folder for the plugin
+      plugin.setWorkingFolder(resolvedPath);
+
+      console.log(`🔧 Playwright fingerprints working folder set to: ${resolvedPath}`);
+    } catch (error) {
+      console.error('❌ Error setting up working folder:', error);
+      // Fallback to default if there's an error
+      const fallbackPath = path.resolve(process.cwd(), '.data_playwright_with_fingerprints');
+      plugin.setWorkingFolder(fallbackPath);
+      console.log(`🔧 Using fallback working folder: ${fallbackPath}`);
+    }
   }
 
   /**
@@ -56,6 +85,13 @@ export class FingerprintPlaywrightService {
    */
   getServiceKey(): string {
     return this.serviceKey;
+  }
+
+  /**
+   * Get the current working folder path
+   */
+  getWorkingFolder(): string {
+    return path.resolve(process.cwd(), this.appConfig.playwrightFingerprints.workingFolder);
   }
 
   /**

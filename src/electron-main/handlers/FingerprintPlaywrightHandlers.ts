@@ -96,6 +96,23 @@ export class FingerprintPlaywrightHandlers {
       }
     });
 
+    // Handler to get working folder information
+    ipcMain.handle('fingerprint-get-working-folder', async () => {
+      try {
+        const workingFolder = this.fingerprintService.getWorkingFolder();
+        return {
+          success: true,
+          workingFolder,
+          message: 'Working folder retrieved successfully'
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: error instanceof Error ? error.message : 'Unknown error occurred'
+        };
+      }
+    });
+
     console.log('🔒 Fingerprint Playwright IPC handlers registered');
   }
 

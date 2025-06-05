@@ -79,7 +79,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   fingerprintGetActiveSessions: () => ipcRenderer.invoke('fingerprint-get-active-sessions'),
 
   // Check if fingerprint service is available (Windows only)
-  fingerprintIsAvailable: () => ipcRenderer.invoke('fingerprint-is-available')
+  fingerprintIsAvailable: () => ipcRenderer.invoke('fingerprint-is-available'),
+
+  // Get working folder information
+  fingerprintGetWorkingFolder: () => ipcRenderer.invoke('fingerprint-get-working-folder')
 });
 
 // --------- Preload scripts loading ---------

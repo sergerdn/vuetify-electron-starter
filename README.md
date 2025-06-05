@@ -19,6 +19,7 @@ This template combines the power of modern web technologies with native Windows 
 - **electron-builder**: Complete solution to package and build Electron apps
 - **OS Integration**: IPC communication between renderer and main process
 - **Playwright Browser Automation**: Launch and control Chrome/Firefox browsers with CDP support
+- **Fingerprint Browser Automation**: Enhanced privacy automation with playwright-with-fingerprints
 - **External Browser Control**: Open URLs in Chrome or default browser
 - **Native Notifications**: System-level notification support
 - **System Information API**: Access to platform and version details
@@ -279,6 +280,74 @@ The build configuration also excludes platform-specific dependencies that aren't
 
 This prevents build errors and reduces the final package size by excluding unnecessary platform-specific files.
 
+## 🔒 Fingerprint Browser Automation
+
+This application includes advanced fingerprint browser automation using the `playwright-with-fingerprints` library for enhanced privacy and stealth automation.
+
+### Features
+
+- **Enhanced Privacy**: Launch browsers with modified fingerprints for stealth automation
+- **Windows-Only**: Optimized for Windows operating system
+- **Chromium Support**: Uses Chromium browser with fingerprint modifications
+- **Service Key Support**: Free and premium service key options
+- **Custom Working Folder**: Configurable engine data storage location
+
+### How to Use
+
+1. **Start the Electron app**: `npm run electron:dev`
+2. **Navigate to Dashboard**: The main application window
+3. **Find Fingerprint Section**: "Fingerprint Browser Automation" component
+4. **Set Service Key**: Enter your service key (leave empty for free version)
+5. **Fetch Fingerprint**: Click "Fetch New Fingerprint" to get a fresh fingerprint
+6. **Enter URL**: Type the website URL (e.g., https://browserleaks.com/canvas)
+7. **Launch Browser**: Click "Launch Chromium with Fingerprint"
+
+### Configuration
+
+The fingerprint service uses environment variables for configuration:
+
+```bash
+# Playwright with Fingerprints
+PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
+```
+
+> 📖 **Reference**: [playwright-with-fingerprints Documentation](https://github.com/CheshireCaat/playwright-with-fingerprints)
+
+### Build Configuration for Fingerprint Automation
+
+The application includes special build configuration to ensure playwright-with-fingerprints works correctly:
+
+```json
+{
+  "asarUnpack": [
+    "**/node_modules/playwright/**/*",
+    "**/node_modules/playwright-with-fingerprints/**/*"
+  ]
+}
+```
+
+### Architecture
+
+The fingerprint integration uses a modular architecture:
+
+```
+src/electron-main/
+├── services/
+│   └── FingerprintPlaywrightService.ts  # Fingerprint automation logic
+└── handlers/
+    └── FingerprintPlaywrightHandlers.ts # Fingerprint IPC handlers
+```
+
+### Testing Fingerprint Automation
+
+1. **Launch the app**: `npm run electron:dev`
+2. **Navigate to Fingerprint section** in the dashboard
+3. **Set service key**: Enter your key or leave empty for free version
+4. **Fetch fingerprint**: Get a fresh fingerprint from the service
+5. **Enter URL**: Any website (e.g., https://browserleaks.com/canvas)
+6. **Launch Chromium**: Watch the browser open with modified fingerprint
+7. **Check console**: See detailed logging of the fingerprint process
+
 ## 📁 Project Structure
 
 ```
@@ -287,9 +356,11 @@ This prevents build errors and reduces the final package size by excluding unnec
 ├── src/                              # Source code
 │   ├── electron-main/                # Electron main process (Windows-focused)
 │   │   ├── services/                 # Business logic services
-│   │   │   └── PlaywrightService.ts  # Playwright automation service
+│   │   │   ├── PlaywrightService.ts  # Playwright automation service
+│   │   │   └── FingerprintPlaywrightService.ts # Fingerprint automation service
 │   │   ├── handlers/                 # IPC communication handlers
-│   │   │   └── PlaywrightHandlers.ts # Playwright IPC handlers
+│   │   │   ├── PlaywrightHandlers.ts # Playwright IPC handlers
+│   │   │   └── FingerprintPlaywrightHandlers.ts # Fingerprint IPC handlers
 │   │   └── index.ts                  # Main process entry point
 │   ├── electron-preload/             # Electron preload scripts
 │   │   ├── index.ts                  # Preload script

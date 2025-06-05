@@ -126,6 +126,13 @@ export interface ElectronAPI {
     available?: boolean;
     message: string;
   }>;
+
+  // Get working folder information
+  fingerprintGetWorkingFolder: () => Promise<{
+    success: boolean;
+    workingFolder?: string;
+    message: string;
+  }>;
 }
 
 declare global {

@@ -57,6 +57,9 @@ VITE_OPEN_DEVTOOLS=true
 
 # Debug (conditional logic)
 DEBUG_BUILD=true
+
+# Playwright with Fingerprints
+PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
 ```
 
 ## Usage Examples

@@ -209,6 +209,16 @@
             <v-icon start>mdi-shield-check</v-icon>
             Enhanced Privacy
           </v-chip>
+
+          <v-divider class="my-3" />
+
+          <div v-if="workingFolder" class="mb-2">
+            <v-chip color="secondary" variant="outlined" class="mb-2">
+              <v-icon start>mdi-folder</v-icon>
+              Engine Data: {{ workingFolder }}
+            </v-chip>
+          </div>
+
           <p class="mt-2 text-caption">
             Free version available with limited features. Premium service key provides access to
             advanced fingerprints and additional customization options.
@@ -228,6 +238,7 @@
   const serviceKey = ref('');
   const urlToOpen = ref('https://browserleaks.com/canvas');
   const currentFingerprint = ref('');
+  const workingFolder = ref('');
   const activeSessions = ref<
     Array<{
       processId: number;
@@ -287,6 +298,20 @@
       }
     } catch (error) {
       showStatus('error', `Error checking availability: ${error}`);
+    }
+  };
+
+  // Load working folder information
+  const loadWorkingFolder = async () => {
+    if (!window.electronAPI) return;
+
+    try {
+      const result = await window.electronAPI.fingerprintGetWorkingFolder();
+      if (result.success && result.workingFolder) {
+        workingFolder.value = result.workingFolder;
+      }
+    } catch (error) {
+      console.error('Error loading working folder:', error);
     }
   };
 
@@ -423,6 +448,7 @@
       await checkAvailability();
       await loadServiceKey();
       await loadActiveSessions();
+      await loadWorkingFolder();
     }
   });
 </script>
