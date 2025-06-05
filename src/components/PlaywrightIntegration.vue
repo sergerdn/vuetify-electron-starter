@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="800">
+  <v-card class="mx-auto" max-width="1200">
     <v-card-title class="d-flex align-center">
       <v-icon class="me-2" color="primary">mdi-web</v-icon>
       <span>Playwright Browser Automation</span>
