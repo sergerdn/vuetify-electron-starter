@@ -35,6 +35,11 @@
           </v-card>
         </v-col>
 
+        <!-- Fingerprint Playwright Browser Automation -->
+        <v-col cols="12">
+          <FingerprintPlaywrightIntegration />
+        </v-col>
+
         <!-- Playwright Browser Automation -->
         <v-col cols="12">
           <PlaywrightIntegration />

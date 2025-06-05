@@ -6,6 +6,7 @@ clean:
 		if [ -d "dist-electron" ]; then rm -rf dist-electron; fi
 		if [ -d "coverage" ]; then rm -rf coverage; fi
 		if [ -d "build-electron" ]; then rm -rf build-electron; fi
+		if [ !-d "./node_modules/playwright/node_modules/fsevents" ]; then mkdir ./node_modules/playwright/node_modules/fsevents; fi
 
 switch_develop:
 		git fetch && git checkout develop && git pull

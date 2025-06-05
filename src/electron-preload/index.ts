@@ -55,7 +55,31 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getActiveSessions: () => ipcRenderer.invoke('get-active-sessions'),
 
   // Get session details
-  getSessionDetails: (processId: number) => ipcRenderer.invoke('get-session-details', processId)
+  getSessionDetails: (processId: number) => ipcRenderer.invoke('get-session-details', processId),
+
+  // Fingerprint Playwright APIs
+  // Set fingerprint service key
+  fingerprintSetServiceKey: (key: string) => ipcRenderer.invoke('fingerprint-set-service-key', key),
+
+  // Get current fingerprint service key
+  fingerprintGetServiceKey: () => ipcRenderer.invoke('fingerprint-get-service-key'),
+
+  // Fetch a new fingerprint
+  fingerprintFetch: (tags?: string[]) => ipcRenderer.invoke('fingerprint-fetch', tags),
+
+  // Launch browser with fingerprint (Chromium only)
+  fingerprintLaunchBrowser: (url: string, fingerprint: string) =>
+    ipcRenderer.invoke('fingerprint-launch-browser', url, fingerprint),
+
+  // Close fingerprint browser
+  fingerprintCloseBrowser: (processId: number) =>
+    ipcRenderer.invoke('fingerprint-close-browser', processId),
+
+  // Get active fingerprint sessions
+  fingerprintGetActiveSessions: () => ipcRenderer.invoke('fingerprint-get-active-sessions'),
+
+  // Check if fingerprint service is available (Windows only)
+  fingerprintIsAvailable: () => ipcRenderer.invoke('fingerprint-is-available')
 });
 
 // --------- Preload scripts loading ---------

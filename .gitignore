@@ -31,3 +31,4 @@ pnpm-debug.log*
 /commit_message.txt
 /tests/e2e/videos/*
 !/tests/e2e/videos/.gitkeep
+/data/

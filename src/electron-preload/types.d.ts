@@ -82,6 +82,50 @@ export interface ElectronAPI {
     };
     message?: string;
   }>;
+
+  // Fingerprint Playwright APIs
+  // Set fingerprint service key
+  fingerprintSetServiceKey: (key: string) => Promise<{ success: boolean; message: string }>;
+
+  // Get current fingerprint service key
+  fingerprintGetServiceKey: () => Promise<{ success: boolean; key?: string; message?: string }>;
+
+  // Fetch a new fingerprint
+  fingerprintFetch: (tags?: string[]) => Promise<{
+    success: boolean;
+    fingerprint?: string;
+    message: string;
+  }>;
+
+  // Launch browser with fingerprint (Chromium only)
+  fingerprintLaunchBrowser: (url: string, fingerprint: string) => Promise<{
+    success: boolean;
+    message: string;
+    processId?: number;
+    fingerprint?: string;
+  }>;
+
+  // Close fingerprint browser
+  fingerprintCloseBrowser: (processId: number) => Promise<{ success: boolean; message: string }>;
+
+  // Get active fingerprint sessions
+  fingerprintGetActiveSessions: () => Promise<{
+    success: boolean;
+    sessions?: Array<{
+      processId: number;
+      url: string;
+      fingerprint: string;
+      startTime: Date;
+    }>;
+    message?: string;
+  }>;
+
+  // Check if fingerprint service is available (Windows only)
+  fingerprintIsAvailable: () => Promise<{
+    success: boolean;
+    available?: boolean;
+    message: string;
+  }>;
 }
 
 declare global {
