@@ -9,6 +9,14 @@ This is a `proof-of-concept` demonstrating browser automation technologies inclu
 standard [Playwright](https://playwright.dev/) and advanced fingerprint automation
 with [`playwright-with-fingerprints`](https://github.com/CheshireCaat/playwright-with-fingerprints).
 
+## 📸 Screenshots
+
+![Vuetify Electron Starter - Main Window Electron](docs/screenshots/main_window_electron.png)
+
+![Vuetify Electron Starter - Main Window Playwright With Fingerprints](docs/screenshots/main_playwright-with-fingerprints.png)
+
+![Vuetify Electron Starter - Main Window Playwright](docs/screenshots/main_playwright.png)
+
 ## 🚀 Quick Download & Start
 
 ### Download Pre-built Application
@@ -46,14 +54,6 @@ with [`playwright-with-fingerprints`](https://github.com/CheshireCaat/playwright
 - **RAM**: 4GB minimum, 8GB recommended
 - **Storage**: 2GB free space (for fingerprint engine)
 - **Internet**: Required for initial setup and fingerprint downloads
-
-## 📸 Screenshots
-
-![Vuetify Electron Starter - Main Window Playwright With Fingerprints](docs/screenshots/main_playwright-with-fingerprints.png)
-
-![Vuetify Electron Starter - Main Window Playwright](docs/screenshots/main_playwright.png)
-
-![Vuetify Electron Starter - Main Window Electron](docs/screenshots/main_window_electron.png)
 
 ## ✨ Features
 
@@ -197,7 +197,7 @@ npm run test:e2e
 
 ## 🎭 Fingerprint Browser Automation
 
-**Advanced stealth automation** using 
+**Advanced stealth automation** using
 [`playwright-with-fingerprints`](https://github.com/CheshireCaat/playwright-with-fingerprints) for enhanced privacy and
 detection avoidance.
 
@@ -257,6 +257,104 @@ Each browser provides automation endpoints:
 - **Console Logs**: Detailed process information and CDP endpoints
 
 ## 🏗️ Technical Architecture
+
+### Vue-Electron Interaction Flow
+
+The following diagram illustrates how data flows between the Vue.js frontend and Electron's main process:
+
+```mermaid
+graph TD
+%% Define link styles
+  linkStyle default stroke: #666, stroke-width: 2px
+%% User interaction flow - Blue
+  A[User] -->|Interacts with| B[Vue Components]
+  B -->|Calls| C[Vue Methods]
+  C -->|Accesses| D[window.electronAPI]
+%% Frontend to backend flow - Purple
+  D -->|Invokes| E[IPC Bridge]
+  E -->|Sends via| F[IPC Channel]
+  F -->|Receives| G[Main Process]
+  G -->|Routes to| H[IPC Handlers]
+  H -->|Calls| I[Services]
+  I -->|Executes| J[Business Logic]
+%% Backend to frontend flow - Green
+  J -->|Returns Data| I
+  I -->|Returns| H
+  H -->|Sends Response| G
+  G -->|Replies via| F
+  F -->|Receives| E
+  E -->|Returns to| D
+%% UI update flow - Orange
+  D -->|Updates| C
+  C -->|Sets| K[Vue Data]
+  K -->|Triggers| L[Reactive Template]
+  L -->|Renders| M[Updated UI]
+  M --> A
+%% Color the links by flow type
+  linkStyle 0,1,2 stroke: #1E88E5, stroke-width: 2px
+  linkStyle 3,4,5,6,7,8 stroke: #7B1FA2, stroke-width: 2px
+  linkStyle 9,10,11,12,13,14 stroke: #2E7D32, stroke-width: 2px
+  linkStyle 15,16,17,18,19 stroke: #FF8F00, stroke-width: 2px
+
+  subgraph "Vue.js Frontend"
+    B["Vue Components<br/>(ElectronIntegration,<br/>PlaywrightIntegration,<br/>FingerprintPlaywrightIntegration)"]
+    C["Vue Methods<br/>(async methods calling electronAPI)"]
+    K["Vue Data<br/>(reactive state)"]
+    L["Reactive Template<br/>(v-if, v-for, v-bind)"]
+    M["Updated UI<br/>(rendered DOM)"]
+  end
+
+  subgraph "Electron Renderer Process"
+    D["window.electronAPI<br/>(exposed by contextBridge)"]
+    E["ipcRenderer<br/>(invoke, send, on)"]
+  end
+
+  subgraph "Electron Preload Script"
+    N["contextBridge.exposeInMainWorld()<br/>(secure API exposure)"]
+    E -.- N
+  end
+
+  subgraph "Electron Main Process"
+    G["app, BrowserWindow, ipcMain<br/>(handle, on)"]
+    H["Handlers<br/>(PlaywrightHandlers,<br/>FingerprintPlaywrightHandlers)"]
+    I["Services<br/>(PlaywrightService,<br/>FingerprintPlaywrightService)"]
+    J["Business Logic<br/>(Playwright browser automation)"]
+  end
+
+  subgraph "IPC Communication"
+    F["IPC Channel<br/>(named channels for specific operations)"]
+  end
+
+  style A fill: #e1f5fe, stroke: #039be5
+  style B fill: #f3e5f5, stroke: #9c27b0
+  style C fill: #f3e5f5, stroke: #9c27b0
+  style D fill: #d1c4e9, stroke: #673ab7
+  style E fill: #d1c4e9, stroke: #673ab7
+  style F fill: #ffecb3, stroke: #ffa000
+  style G fill: #c8e6c9, stroke: #4caf50
+  style H fill: #c8e6c9, stroke: #4caf50
+  style I fill: #a5d6a7, stroke: #2e7d32
+  style J fill: #a5d6a7, stroke: #2e7d32
+  style K fill: #f3e5f5, stroke: #9c27b0
+  style L fill: #f3e5f5, stroke: #9c27b0
+  style M fill: #f3e5f5, stroke: #9c27b0
+  style N fill: #d1c4e9, stroke: #673ab7
+```
+
+This diagram shows:
+
+- How user interactions in Vue components trigger IPC communication
+- The role of the preload script and contextBridge in securing the renderer process
+- How IPC channels facilitate communication between processes
+- The flow of data through handlers and services in the main process
+- How responses are returned to update the UI reactively
+
+The diagram uses color-coded paths to distinguish different data flows:
+
+- **Blue**: User interaction flow (user to Vue components)
+- **Purple**: Frontend to backend flow (Vue to an Electron main process)
+- **Green**: Backend to frontend flow (response data returning to renderer)
+- **Orange**: UI update flow (updating Vue data and rendering UI)
 
 ### Project Structure
 
@@ -508,17 +606,6 @@ mkdir ./node_modules/playwright/node_modules/fsevents
 - **Automation Banners**: Browsers show automation warnings
 - **Fingerprint Modifications**: Enhanced stealth with fingerprint automation
 - **CDP Endpoints**: External tools can connect to automation sessions
-
-## 📸 Screenshots
-
-![Fingerprint Browser Automation](docs/screenshots/main_playwright-with-fingerprints.png)
-*Advanced fingerprint automation with stealth capabilities*
-
-![Standard Browser Automation](docs/screenshots/main_playwright.png)
-*Multi-browser automation with Chrome and Firefox support*
-
-![Desktop Integration](docs/screenshots/main_window_electron.png)
-*Native Windows desktop application interface*
 
 ## 🔧 Troubleshooting
 
