@@ -34,9 +34,11 @@ For optimal results, your Windows icon should:
 
 1. Create a high-resolution PNG (1024x1024 pixels)
 2. Use online converters:
-  - [icoconvert.com](https://icoconvert.com/)
-  - [convertio.co](https://convertio.co/png-ico/)
-  - [favicon.io](https://favicon.io/favicon-converter/)
+
+- [icoconvert.com](https://icoconvert.com/)
+- [convertio.co](https://convertio.co/png-ico/)
+- [favicon.io](https://favicon.io/favicon-converter/)
+
 3. Download the ICO file and replace `build-resources/icon.ico`
 
 #### Option 2: Professional Tools
@@ -111,5 +113,5 @@ Auto-updater functionality can be added later if needed:
 
 The build process creates:
 
-- `dist-electron/win-unpacked/` - Unpacked Windows application
-- `dist-electron/builder-effective-config.yaml` - Build configuration used
+- `dist-electron/{version}/win-unpacked/` - Unpacked Windows application (e.g., `dist-electron/0.0.1/win-unpacked/`)
+- `dist-electron/{version}/builder-effective-config.yaml` - Build configuration used

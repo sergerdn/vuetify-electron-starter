@@ -28,7 +28,13 @@
     "electron:dev": "electron-vite dev",
     "electron:build": "electron-vite build && electron-builder",
     "electron:preview": "electron-vite preview",
-    "electron:pack": "electron-vite build && electron-builder --dir"
+    "electron:pack": "electron-vite build && electron-builder --dir",
+    "commit": "cz",
+    "version:dry": "standard-version --dry-run",
+    "version:auto": "standard-version",
+    "version:patch": "standard-version --release-as patch",
+    "version:minor": "standard-version --release-as minor",
+    "version:major": "standard-version --release-as major"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.5",
@@ -48,7 +54,9 @@
     "@vue/eslint-config-typescript": "14.5.0",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.7.0",
+    "commitizen": "^4.3.1",
     "cypress": "14.4.1",
+    "cz-conventional-changelog": "^3.3.0",
     "electron": "36.4.0",
     "electron-builder": "26.0.12",
     "electron-vite": "3.1.0",
@@ -63,6 +71,7 @@
     "pinia": "3.0.3",
     "prettier": "3.5.3",
     "sass": "1.89.1",
+    "standard-version": "^9.5.0",
     "start-server-and-test": "2.0.12",
     "typescript": "~5.8.3",
     "unplugin-auto-import": "19.3.0",
@@ -82,7 +91,7 @@
     "copyright": "Copyright © 2025 ${author}",
     "electronVersion": "36.3.2",
     "directories": {
-      "output": "dist-electron",
+      "output": "dist-electron/${version}",
       "buildResources": "build-resources"
     },
     "files": [
@@ -140,5 +149,10 @@
         "releaseType": "release"
       }
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
