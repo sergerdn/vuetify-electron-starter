@@ -390,6 +390,19 @@ PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
 |--------------|--------------------------------------------|
 | `npm run ci` | Run all checks (lint + type-check + tests) |
 
+### Commits & Releases
+
+| Script                  | Description                                 |
+|-------------------------|---------------------------------------------|
+| `npm run commit`        | Interactive commit with conventional format |
+| `npm run version:dry`   | Preview what next version would be          |
+| `npm run version:auto`  | Automatically determine and bump version    |
+| `npm run version:patch` | Bump patch version (0.0.1 → 0.0.2)          |
+| `npm run version:minor` | Bump minor version (0.1.0 → 0.2.0)          |
+| `npm run version:major` | Bump major version (1.0.0 → 2.0.0)          |
+
+📖 **Developer release workflow**: [VERSIONING.md](./VERSIONING.md)
+
 ## ⚠️ Important Notes
 
 ### Windows Build Requirements
@@ -559,7 +572,11 @@ Electron applications run using the `file://` protocol, which has important impl
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes using [Conventional Commits](https://www.conventionalcommits.org/):
+3. Commit your changes using the interactive commit tool:
+   ```bash
+   npm run commit  # Interactive conventional commit
+   ```
+   Or manually using [Conventional Commits](https://www.conventionalcommits.org/):
    ```bash
    git commit -m 'feat: add amazing feature'
    git commit -m 'fix: resolve issue with component'
@@ -567,6 +584,8 @@ Electron applications run using the `file://` protocol, which has important impl
    ```
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+📖 **For detailed commit and versioning guidelines**: [VERSIONING.md](./VERSIONING.md)
 
 ### Commit Message Format
 
