@@ -31,3 +31,5 @@ pnpm-debug.log*
 /commit_message.txt
 /tests/e2e/videos/*
 !/tests/e2e/videos/.gitkeep
+/data/
+/.data_playwright_with_fingerprints/

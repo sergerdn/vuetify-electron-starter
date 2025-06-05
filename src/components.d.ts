@@ -11,6 +11,7 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     Dashboard: typeof import('./components/Dashboard.vue')['default']
     ElectronIntegration: typeof import('./components/ElectronIntegration.vue')['default']
+    FingerprintPlaywrightIntegration: typeof import('./components/FingerprintPlaywrightIntegration.vue')['default']
     PlaywrightIntegration: typeof import('./components/PlaywrightIntegration.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

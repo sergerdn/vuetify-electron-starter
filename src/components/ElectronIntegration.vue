@@ -1,6 +1,6 @@
 <template>
   <!-- Electron OS Integration Test -->
-  <v-card class="py-4" color="primary" rounded="lg" variant="tonal">
+  <v-card class="py-4 mx-auto" color="primary" rounded="lg" variant="tonal" max-width="1200">
     <v-card-title class="text-center">
       <v-icon class="me-2">mdi-desktop-classic</v-icon>
       Electron OS Integration Test

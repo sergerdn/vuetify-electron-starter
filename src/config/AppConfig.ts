@@ -88,6 +88,14 @@ export class AppConfig {
     enabled: env.get('DEBUG_BUILD').default('false').asBool()
   };
 
+  // Playwright with Fingerprints Configuration
+  public readonly playwrightFingerprints = {
+    workingFolder: env
+      .get('PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER')
+      .default('.data_playwright_with_fingerprints')
+      .asString()
+  };
+
   /**
    * Get the server URL (HTTP/HTTPS based on configuration)
    */
@@ -152,7 +160,8 @@ export class AppConfig {
       app: this.app,
       theme: this.theme,
       development: this.development,
-      debug: this.debug
+      debug: this.debug,
+      playwrightFingerprints: this.playwrightFingerprints
     };
   }
 }

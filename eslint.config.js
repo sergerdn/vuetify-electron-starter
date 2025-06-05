@@ -48,6 +48,9 @@ export default [
       '**/.git/**', // Git repository files
       '**/.cache/**', // Cache directories
 
+      // Data directories (runtime data, not source code)
+      '**/.data*/**', // Any folder starting with .data (e.g., .data_playwright_with_fingerprints)
+
       // Package manager files (lock files are generated)
       '**/package-lock.json', // npm lock file
       '**/yarn.lock', // Yarn lock file

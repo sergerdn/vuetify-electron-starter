@@ -4,12 +4,14 @@ import path from 'node:path';
 import { exec } from 'node:child_process';
 import { AppConfig } from '../config/AppConfig.js';
 import { PlaywrightHandlers } from './handlers/PlaywrightHandlers.js';
+import { FingerprintPlaywrightHandlers } from './handlers/FingerprintPlaywrightHandlers.js';
 
 // Create config instance
 const appConfig = new AppConfig();
 
 // Initialize Playwright handlers
 let playwrightHandlers: PlaywrightHandlers;
+let fingerprintPlaywrightHandlers: FingerprintPlaywrightHandlers;
 
 // Add command line switches before the app is ready
 app.commandLine.appendSwitch('--no-sandbox');
@@ -172,6 +174,9 @@ app.whenReady().then(() => {
   // Initialize Playwright handlers
   playwrightHandlers = new PlaywrightHandlers();
 
+  // Initialize Fingerprint Playwright handlers
+  fingerprintPlaywrightHandlers = new FingerprintPlaywrightHandlers();
+
   createWindow();
 });
 
@@ -180,6 +185,11 @@ app.on('window-all-closed', async () => {
   // Clean up Playwright sessions before quitting
   if (playwrightHandlers) {
     await playwrightHandlers.cleanup();
+  }
+
+  // Clean up Fingerprint Playwright sessions before quitting
+  if (fingerprintPlaywrightHandlers) {
+    await fingerprintPlaywrightHandlers.cleanup();
   }
 
   app.quit();
