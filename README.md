@@ -1,7 +1,14 @@
 # Vuetify Electron Starter
 
-A modern starter template for building Windows desktop applications with Vue.js 3, Vuetify 3, and Electron. This
-template combines the power of modern web technologies with native Windows desktop capabilities.
+A modern starter template for building Windows desktop applications with `Vue.js 3`, `Vuetify 3`, and `Electron`.
+
+This template combines the power of modern web technologies with native Windows desktop capabilities.
+
+## 📸 Screenshots
+
+![Vuetify Electron Starter - Main Window Playwright](docs/screenshots/main_playwright.png)
+
+![Vuetify Electron Starter - Main Window Electron](docs/screenshots/main_window_electron.png)
 
 ## ✨ Features
 
@@ -263,12 +270,6 @@ The build configuration also excludes platform-specific dependencies that aren't
 ```
 
 This prevents build errors and reduces the final package size by excluding unnecessary platform-specific files.
-
-## 📸 Screenshots
-
-![Vuetify Electron Starter - Main Window Playwright](docs/screenshots/main_playwright.png)
-
-![Vuetify Electron Starter - Main Window Electron](docs/screenshots/main_window_electron.png)
 
 ## 📁 Project Structure
 
