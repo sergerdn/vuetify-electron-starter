@@ -4,11 +4,48 @@ A modern starter template for building Windows desktop applications with `Vue.js
 
 This template combines the power of modern web technologies with native Windows desktop capabilities.
 
-**Main goal: Create Windows app that can automate browsers**: This is a proof-of-concept demonstrating browser
-automation technologies including standard Playwright and advanced fingerprint automation with
-`playwright-with-fingerprints`.
+**Main goal: Create a Windows app that can automate browsers**:
+This is a `proof-of-concept` demonstrating browser automation technologies including
+standard [Playwright](https://playwright.dev/) and advanced fingerprint automation
+with [`playwright-with-fingerprints`](https://github.com/CheshireCaat/playwright-with-fingerprints).
 
-It shows working integrations, but it works!
+## 🚀 Quick Download & Start
+
+### Download Pre-built Application
+
+**Latest Release: [v0.0.2](https://github.com/sergerdn/vuetify-electron-starter/releases/tag/v0.0.2)**
+
+1.**Download**:
+
+- Go to [Releases](https://github.com/sergerdn/vuetify-electron-starter/releases)
+- Click on the latest release
+- Under "Assets," download the `.zip` file (e.g., `VuetifyElectronStarter-0.0.2-x64.zip`)
+
+2.**Extract**: Right-click the downloaded `.zip` file and select "Extract All..." to your desired location
+3.**Run**: Navigate to the extracted folder and double-click `VuetifyElectronStarter.exe` to start the application
+
+### What You Get
+
+- ✅ **Ready-to-use Windows desktop app**: No installation required
+- ✅ **Browser automation tools**: Chrome and Firefox automation
+- ✅ **Advanced fingerprint automation** - Stealth browsing capabilities
+- ✅ **Modern UI** - Vue.js 3 + Vuetify 3 interface
+
+### First Launch Notes
+
+⚠️ **Important**: On the first use of fingerprint automation:
+
+- The app will download the fingerprint engine (800+ MB) when you first click "Launch Browser" in the fingerprint
+  section
+- Download time depends on your internet speed
+- This is a one-time download, later fingerprint requests are instant
+
+### System Requirements
+
+- **OS**: Windows 10/11 (x64)
+- **RAM**: 4GB minimum, 8GB recommended
+- **Storage**: 2GB free space (for fingerprint engine)
+- **Internet**: Required for initial setup and fingerprint downloads
 
 ## 📸 Screenshots
 
@@ -22,23 +59,25 @@ It shows working integrations, but it works!
 
 ### 🖥️ Desktop Application
 
-- **Electron**: Latest stable version for Windows desktop apps
-- **electron-vite**: Modern build tooling for Electron
-- **electron-builder**: Complete solution to package and build Electron apps
+- **[Electron](https://www.electronjs.org/)**: Latest stable version for Windows desktop apps
+- **[electron-vite](https://electron-vite.org/)**: Modern build tooling for Electron
+- **[electron-builder](https://www.electron.build/)**: Complete solution to package and build Electron apps
 - **OS Integration**: IPC communication between renderer and main process
-- **Playwright Browser Automation**: Launch and control Chrome/Firefox browsers with CDP support
-- **Fingerprint Browser Automation**: Enhanced privacy automation with playwright-with-fingerprints
+- **[Playwright](https://playwright.dev/) Browser Automation**: Launch and control Chrome/Firefox browsers with CDP
+  support
+- **Fingerprint Browser Automation**: Enhanced privacy automation with [
+  `playwright-with-fingerprints`](https://github.com/CheshireCaat/playwright-with-fingerprints)
 - **External Browser Control**: Open URLs in Chrome or default browser
 - **Native Notifications**: System-level notification support
 - **System Information API**: Access to platform and version details
 
 ### 🚀 Modern Web Stack
 
-- **Vue.js 3**: Progressive JavaScript framework with Composition API
-- **Vuetify 3**: Material Design component framework
-- **Vite**: Next generation frontend tooling
-- **TypeScript**: Full TypeScript support throughout the project
-- **Pinia**: Intuitive state management for Vue
+- **[Vue.js 3](https://vuejs.org/)**: Progressive JavaScript framework with Composition API
+- **[Vuetify 3](https://vuetifyjs.com/)**: Material Design component framework
+- **[Vite](https://vitejs.dev/)**: Next generation frontend tooling
+- **[TypeScript](https://www.typescriptlang.org/)**: Full TypeScript support throughout the project
+- **[Pinia](https://pinia.vuejs.org/)**: Intuitive state management for Vue
 
 ### 🧪 Testing & Quality
 
@@ -122,8 +161,9 @@ This will:
 
 **Output:**
 
-- `dist-electron/win-unpacked/` - Unpacked Windows application folder
-- `dist-electron/win-unpacked/VuetifyElectronStarter.exe` - Windows executable with custom icon
+- `dist-electron/{version}/win-unpacked/` - Unpacked Windows application folder (e.g.,
+  `dist-electron/0.0.2/win-unpacked/`)
+- `dist-electron/{version}/win-unpacked/VuetifyElectronStarter.exe` - Windows executable with custom icon
 
 **Windows Build Fix:**
 
@@ -157,7 +197,9 @@ npm run test:e2e
 
 ## 🎭 Fingerprint Browser Automation
 
-**Advanced stealth automation** using `playwright-with-fingerprints` for enhanced privacy and detection avoidance.
+**Advanced stealth automation** using 
+[`playwright-with-fingerprints`](https://github.com/CheshireCaat/playwright-with-fingerprints) for enhanced privacy and
+detection avoidance.
 
 ### Key Features
 
@@ -175,11 +217,11 @@ npm run test:e2e
 
 ### First-Time Setup
 
-⚠️ **Important**: On first launch, the fingerprint engine downloads (800+ MB)
+⚠️ **Important**: On the first fingerprint request, the fingerprint engine downloads (800+ MB)
 
 - **Download Time**: Depends on internet speed
 - **Storage**: `.data_playwright_with_fingerprints` directory
-- **One-Time**: Subsequent launches are instant
+- **One-Time**: Subsequent fingerprint requests are instant
 
 ### Testing Fingerprints
 
@@ -275,9 +317,10 @@ Each browser provides automation endpoints:
 │   ├── electron-preload/             # Compiled preload scripts
 │   └── renderer/                     # Compiled renderer (Vue app)
 ├── dist-electron/                    # Built Windows application (auto-generated)
-│   ├── win-unpacked/                 # Unpacked Windows application
-│   ├── builder-debug.yml             # Electron builder debug info
-│   └── builder-effective-config.yaml # Effective build configuration
+│   └── {version}/                    # Version-specific build output (e.g., 0.0.2/)
+│       ├── win-unpacked/             # Unpacked Windows application
+│       ├── builder-debug.yml         # Electron builder debug info
+│       └── builder-effective-config.yaml # Effective build configuration
 ├── build-resources/                  # Build assets (icons, etc.)
 │   ├── README.md                     # Icon and build resources guide
 │   ├── v-logo.ico                    # Windows application icon
@@ -403,6 +446,47 @@ PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
 
 📖 **Developer release workflow**: [VERSIONING.md](./VERSIONING.md)
 
+## 📦 Creating Releases
+
+### For Developers
+
+To create a new release with the built application:
+
+1. **Bump Version**:
+   ```bash
+   npm run version:patch  # 0.0.1 → 0.0.2
+   npm run version:minor  # 0.1.0 → 0.2.0
+   npm run version:major  # 1.0.0 → 2.0.0
+   ```
+
+2. **Build Application**:
+   ```bash
+   npm run electron:build
+   ```
+
+3. **Create Release**:
+
+- Push the version tag: `git push origin v0.0.2`
+- Go to [GitHub Releases](https://github.com/sergerdn/vuetify-electron-starter/releases)
+- Create a new release from the tag
+- Upload the built application from `dist-electron/{version}/win-unpacked/`
+
+### Release Assets
+
+The built application includes:
+
+- `VuetifyElectronStarter.exe` - Main executable
+- All required dependencies and libraries
+- Unpacked format for easy distribution
+
+### Distribution
+
+Users can:
+
+- Download and extract the zip file
+- Run the executable directly (no installation required)
+- Move the folder to any location on their system
+
 ## ⚠️ Important Notes
 
 ### Windows Build Requirements
@@ -413,10 +497,10 @@ Create this directory before building to avoid fsevents errors:
 mkdir ./node_modules/playwright/node_modules/fsevents
 ```
 
-### First Launch Considerations
+### First Use Considerations
 
-- **Fingerprint Engine**: 800+ MB download on first use
-- **Internet Required**: Initial setup requires internet connection
+- **Fingerprint Engine**: 800+ MB download on first fingerprint request
+- **Internet Required**: Initial fingerprint setup requires internet connection
 - **Storage Space**: Ensure adequate disk space for automation engines
 
 ### Security & Detection
