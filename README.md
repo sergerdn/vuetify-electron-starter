@@ -274,6 +274,7 @@ This prevents build errors and reduces the final package size by excluding unnec
 
 ```
 ├── public/                           # Static assets
+│   └── favicon.ico                   # Application favicon
 ├── src/                              # Source code
 │   ├── electron-main/                # Electron main process (Windows-focused)
 │   │   ├── services/                 # Business logic services
@@ -289,21 +290,66 @@ This prevents build errors and reduces the final package size by excluding unnec
 │   ├── pages/                        # Application pages
 │   ├── plugins/                      # Vue plugins
 │   ├── router/                       # Vue Router configuration
-│   └── stores/                       # Pinia stores
-├── tests/                            # Test files
+│   ├── stores/                       # Pinia stores
+│   ├── styles/                       # Global styles and Vuetify settings
+│   ├── utils/                        # Utility functions
+│   ├── config/                       # Configuration management
+│   ├── auto-imports.d.ts             # Auto-generated import types
+│   ├── components.d.ts               # Auto-generated component types
+│   ├── typed-router.d.ts             # Auto-generated router types
+│   ├── App.vue                       # Root Vue component
+│   └── main.ts                       # Application entry point
+├── tests/                            # Comprehensive test suite
+│   ├── setup.ts                      # Global test setup and utilities
+│   ├── unit/                         # Unit and component tests (Vitest)
+│   │   ├── components/               # Vue component tests
+│   │   └── config/                   # Configuration unit tests
+│   ├── integration/                  # Integration tests (Vitest)
+│   │   └── config_integration.spec.ts # Configuration integration tests
 │   ├── e2e/                          # End-to-end tests (Cypress)
-│   └── unit/                         # Unit tests (Vitest)
+│   │   ├── fixtures/                 # Test data for E2E tests
+│   │   ├── support/                  # Cypress support files
+│   │   ├── screenshots/              # Test screenshots (auto-generated)
+│   │   ├── videos/                   # Test videos (auto-generated)
+│   │   └── home.cy.js                # Sample E2E test
+│   ├── fixtures/                     # Shared test fixtures
+│   │   └── env_files.ts              # Environment file fixtures
+│   └── helpers/                      # Test helper utilities
+│       └── config_helpers.ts         # Configuration test helpers
 ├── docs/                             # Documentation
 │   └── screenshots/                  # Application screenshots
-├── build-electron/                   # Compiled Electron files
+├── build-electron/                   # Compiled Electron files (auto-generated)
 │   ├── electron-main/                # Compiled main process
 │   ├── electron-preload/             # Compiled preload scripts
 │   └── renderer/                     # Compiled renderer (Vue app)
-├── dist-electron/                    # Built Windows application
+├── dist-electron/                    # Built Windows application (auto-generated)
+│   ├── win-unpacked/                 # Unpacked Windows application
+│   ├── builder-debug.yml             # Electron builder debug info
+│   └── builder-effective-config.yaml # Effective build configuration
 ├── build-resources/                  # Build assets (icons, etc.)
+│   ├── README.md                     # Icon and build resources guide
+│   ├── v-logo.ico                    # Windows application icon
+│   └── v-logo.svg                    # SVG source icon
+├── scripts/                          # Build and utility scripts
+├── node_modules/                     # Dependencies (auto-generated)
+├── .env.production                   # Production environment variables (in git)
+├── .env.development                  # Development environment variables (not in git)
+├── .env.development.example          # Development environment template
+├── CONFIG.md                         # Configuration documentation
 ├── electron.vite.config.ts           # Electron-Vite configuration
-├── vite.config.ts                    # Vite configuration
-└── package.json                      # Dependencies and scripts
+├── vite.config.mts                   # Vite configuration with test setup
+├── cypress.config.cjs                # Cypress E2E test configuration
+├── eslint.config.js                  # ESLint configuration
+├── tsconfig.json                     # TypeScript configuration (main)
+├── tsconfig.app.json                 # TypeScript configuration (app)
+├── tsconfig.node.json                # TypeScript configuration (Node.js)
+├── tsconfig.preload.json             # TypeScript configuration (preload)
+├── package.json                      # Dependencies and scripts
+├── package-lock.json                 # Dependency lock file
+├── index.html                        # HTML entry point
+├── env.d.ts                          # Environment type definitions
+├── Makefile                          # Development automation tasks
+└── README.md                         # Project documentation
 ```
 
 ## 🔧 Configuration Files
@@ -321,21 +367,46 @@ This prevents build errors and reduces the final package size by excluding unnec
 
 ## 📋 Available Scripts
 
-| Script                     | Description                                |
-|----------------------------|--------------------------------------------|
-| `npm run dev`              | Start web development server               |
-| `npm run build`            | Build web application for production       |
-| `npm run preview`          | Preview built web application              |
-| `npm run electron:dev`     | Start Electron in development mode         |
-| `npm run electron:build`   | Build complete Electron application        |
-| `npm run electron:preview` | Preview built Electron application         |
-| `npm run test`             | Run unit tests with Vitest                 |
-| `npm run test:e2e`         | Run end-to-end tests with Cypress          |
-| `npm run test:e2e:open`    | Open Cypress test runner                   |
-| `npm run test:all`         | Run all tests (unit + e2e)                 |
-| `npm run lint`             | Lint code with ESLint                      |
-| `npm run type-check`       | Check TypeScript types                     |
-| `npm run ci`               | Run all checks (lint + type-check + tests) |
+### Development
+
+| Script                     | Description                          |
+|----------------------------|--------------------------------------|
+| `npm run dev`              | Start web development server         |
+| `npm run build`            | Build web application for production |
+| `npm run preview`          | Preview built web application        |
+| `npm run electron:dev`     | Start Electron in development mode   |
+| `npm run electron:build`   | Build complete Electron application  |
+| `npm run electron:preview` | Preview built Electron application   |
+| `npm run electron:pack`    | Pack Electron app without installer  |
+
+### Testing
+
+| Script                  | Description                              |
+|-------------------------|------------------------------------------|
+| `npm run test`          | Run unit and integration tests (Vitest)  |
+| `npm run test:watch`    | Run tests in watch mode                  |
+| `npm run test:coverage` | Generate test coverage report            |
+| `npm run test:e2e`      | Run end-to-end tests with Cypress        |
+| `npm run test:e2e:open` | Open Cypress test runner                 |
+| `npm run test:all`      | Run all tests (unit + integration + e2e) |
+
+### Code Quality
+
+| Script                 | Description                         |
+|------------------------|-------------------------------------|
+| `npm run lint`         | Lint code with ESLint               |
+| `npm run lint:fix`     | Fix ESLint issues automatically     |
+| `npm run format`       | Format code with Prettier           |
+| `npm run format:check` | Check code formatting               |
+| `npm run format:all`   | Format all files including markdown |
+| `npm run lint:format`  | Run lint fix + format together      |
+| `npm run type-check`   | Check TypeScript types              |
+
+### CI/CD
+
+| Script       | Description                                |
+|--------------|--------------------------------------------|
+| `npm run ci` | Run all checks (lint + type-check + tests) |
 
 ## 🛠️ Development Tips
 
