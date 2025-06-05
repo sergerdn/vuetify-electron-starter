@@ -1,6 +1,8 @@
 import { plugin } from 'playwright-with-fingerprints';
 import type { Browser, BrowserContext, Page } from 'playwright';
 import path from 'path';
+import os from 'os';
+import fs from 'fs';
 import { AppConfig } from '../../config/AppConfig.js';
 
 export interface FingerprintBrowserSession {
@@ -11,6 +13,7 @@ export interface FingerprintBrowserSession {
   fingerprint: string;
   url: string;
   startTime: Date;
+  userDataDir: string;
 }
 
 export interface FingerprintLaunchResult {
@@ -48,7 +51,7 @@ export class FingerprintPlaywrightService {
   }
 
   /**
-   * Setup the working folder for playwright-with-fingerprints engine
+   * Set up the working folder for playwright-with-fingerprints engine
    */
   private setupWorkingFolder(): void {
     try {
@@ -95,6 +98,35 @@ export class FingerprintPlaywrightService {
   }
 
   /**
+   * Create a temporary directory for the persistent context
+   */
+  private createTempUserDataDir(): string {
+    const tempDir = os.tmpdir();
+    const sessionId = `fingerprint-session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const userDataDir = path.join(tempDir, 'playwright-fingerprints', sessionId);
+
+    // Create the directory if it doesn't exist
+    fs.mkdirSync(userDataDir, { recursive: true });
+
+    console.log(`📁 Created temp user data directory: ${userDataDir}`);
+    return userDataDir;
+  }
+
+  /**
+   * Clean up temporary user data directory
+   */
+  private cleanupTempUserDataDir(userDataDir: string): void {
+    try {
+      if (fs.existsSync(userDataDir)) {
+        fs.rmSync(userDataDir, { recursive: true, force: true });
+        console.log(`🗑️ Cleaned up temp user data directory: ${userDataDir}`);
+      }
+    } catch (error) {
+      console.warn(`⚠️ Failed to cleanup temp directory ${userDataDir}:`, error);
+    }
+  }
+
+  /**
    * Fetch a new fingerprint from the service
    */
   async fetchFingerprint(
@@ -137,8 +169,11 @@ export class FingerprintPlaywrightService {
       // Apply the fingerprint
       plugin.useFingerprint(fingerprint);
 
-      // Launch the browser with fingerprint
-      const browser = await plugin.launch({
+      // Create a temporary user data directory
+      const userDataDir = this.createTempUserDataDir();
+
+      // Launch the browser with fingerprint using the recommended method
+      const context = await plugin.launchPersistentContext(userDataDir, {
         headless: false,
         args: [
           '--disk-cache-size=5000000',
@@ -148,8 +183,11 @@ export class FingerprintPlaywrightService {
         ]
       });
 
-      // Create a new page directly (no need for a separate context)
-      const page = await browser.newPage();
+      // Get the browser instance from context
+      const browser = context.browser();
+
+      // Create a new page from the context
+      const page = await context.newPage();
 
       // Navigate to the URL
       console.log(`🌐 Navigating to: ${url}`);
@@ -164,11 +202,12 @@ export class FingerprintPlaywrightService {
       const session: FingerprintBrowserSession = {
         processId,
         browser: browser as any, // playwright-with-fingerprints returns a compatible browser
-        context: page.context(),
+        context: context as any, // Use the persistent context
         page,
         fingerprint,
         url,
-        startTime: new Date()
+        startTime: new Date(),
+        userDataDir
       };
 
       this.activeBrowsers.set(processId, session);
@@ -198,8 +237,15 @@ export class FingerprintPlaywrightService {
         return { success: false, message: 'Browser session not found' };
       }
 
-      // Close browser and release resources
-      await session.browser.close();
+      // Close context and browser resources
+      await session.context.close();
+      if (session.browser) {
+        await session.browser.close();
+      }
+
+      // Clean up temporary user data directory
+      this.cleanupTempUserDataDir(session.userDataDir);
+
       this.activeBrowsers.delete(processId);
 
       console.log(`Browser session ${processId} closed successfully`);

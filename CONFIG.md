@@ -59,6 +59,7 @@ VITE_OPEN_DEVTOOLS=true
 DEBUG_BUILD=true
 
 # Playwright with Fingerprints
+# Note: On first launch, the engine will be downloaded to this folder (800+ MB, depends on internet speed)
 PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
 ```
 

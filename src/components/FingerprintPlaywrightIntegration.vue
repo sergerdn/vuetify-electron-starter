@@ -219,6 +219,13 @@
             </v-chip>
           </div>
 
+          <v-alert type="info" variant="tonal" class="mt-3 mb-2">
+            <v-icon>mdi-information</v-icon>
+            <strong>First Launch:</strong> The fingerprint engine will be downloaded to your working
+            folder ({{ workingFolder || '.data_playwright_with_fingerprints' }}) on first use. This
+            may take time depending on your internet speed (800+ MB download).
+          </v-alert>
+
           <p class="mt-2 text-caption">
             Free version available with limited features. Premium service key provides access to
             advanced fingerprints and additional customization options.

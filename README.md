@@ -6,6 +6,8 @@ This template combines the power of modern web technologies with native Windows 
 
 ## 📸 Screenshots
 
+![Vuetify Electron Starter - Main Window Playwright With Fingerprints](docs/screenshots/main_playwright-with-fingerprints.png)
+
 ![Vuetify Electron Starter - Main Window Playwright](docs/screenshots/main_playwright.png)
 
 ![Vuetify Electron Starter - Main Window Electron](docs/screenshots/main_window_electron.png)
@@ -282,12 +284,13 @@ This prevents build errors and reduces the final package size by excluding unnec
 
 ## 🔒 Fingerprint Browser Automation
 
-This application includes advanced fingerprint browser automation using the `playwright-with-fingerprints` library for enhanced privacy and stealth automation.
+This application includes advanced fingerprint browser automation using the `playwright-with-fingerprints` library for
+enhanced privacy and stealth automation.
 
 ### Features
 
 - **Enhanced Privacy**: Launch browsers with modified fingerprints for stealth automation
-- **Windows-Only**: Optimized for Windows operating system
+- **Windows-Only**: Optimized for a Windows operating system
 - **Chromium Support**: Uses Chromium browser with fingerprint modifications
 - **Service Key Support**: Free and premium service key options
 - **Custom Working Folder**: Configurable engine data storage location
@@ -297,8 +300,12 @@ This application includes advanced fingerprint browser automation using the `pla
 1. **Start the Electron app**: `npm run electron:dev`
 2. **Navigate to Dashboard**: The main application window
 3. **Find Fingerprint Section**: "Fingerprint Browser Automation" component
-4. **Set Service Key**: Enter your service key (leave empty for free version)
+4. **Set Service Key**: Enter your service key (leave empty for a free version)
 5. **Fetch Fingerprint**: Click "Fetch New Fingerprint" to get a fresh fingerprint
+
+- ⚠️ **First time**: Engine download may take time (depends on internet speed, 800+ MB)
+- ✅ **Subsequent uses**: Instant fingerprint fetching
+
 6. **Enter URL**: Type the website URL (e.g., https://browserleaks.com/canvas)
 7. **Launch Browser**: Click "Launch Chromium with Fingerprint"
 
@@ -308,10 +315,40 @@ The fingerprint service uses environment variables for configuration:
 
 ```bash
 # Playwright with Fingerprints
+# Note: On first launch, the engine will be downloaded to this folder (may take some time)
 PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
 ```
 
-> 📖 **Reference**: [playwright-with-fingerprints Documentation](https://github.com/CheshireCaat/playwright-with-fingerprints)
+### First Launch
+
+⚠️ **Important**: On the first launch of fingerprint automation, the `playwright-with-fingerprints` engine will be
+downloaded to the configured working folder.
+
+This process:
+
+- **Download Size**: Over 800 MB (Chromium engine with fingerprint modifications)
+- **Download Time**: Depends on internet speed
+- **Console Message**: You'll see "The browser is downloading. This may take some time."
+- **Storage Location**: Files are stored in `.data_playwright_with_fingerprints` (or your configured folder)
+- **One-Time Process**: Subsequent launches will use the cached engine and start immediately
+
+**What to expect during the first launch:**
+
+```
+🎭 Fetching fingerprint with tags: ['Microsoft Windows', 'Chrome']
+The browser is downloading - this may take some time.
+📦 Downloading engine to: F:\WebstormProjects\vuetify-electron-starter\.data_playwright_with_fingerprints
+⏳ Please wait while the fingerprint engine is being prepared...
+✅ Engine download completed successfully!
+🚀 Launching Chromium with fingerprint...
+```
+
+**Note**: The service uses `launchPersistentContext` method as recommended by the playwright-with-fingerprints library (
+the original `launch` method is temporarily unsupported). Each browser session uses a unique temporary directory in the
+system temp folder for user data, which is automatically cleaned up when the session is closed.
+
+> 📖 **Reference
+**: [playwright-with-fingerprints Documentation](https://github.com/CheshireCaat/playwright-with-fingerprints)
 
 ### Build Configuration for Fingerprint Automation
 
@@ -340,13 +377,17 @@ src/electron-main/
 
 ### Testing Fingerprint Automation
 
-1. **Launch the app**: `npm run electron:dev`
-2. **Navigate to Fingerprint section** in the dashboard
-3. **Set service key**: Enter your key or leave empty for free version
-4. **Fetch fingerprint**: Get a fresh fingerprint from the service
-5. **Enter URL**: Any website (e.g., https://browserleaks.com/canvas)
-6. **Launch Chromium**: Watch the browser open with modified fingerprint
-7. **Check console**: See detailed logging of the fingerprint process
+1.**Launch the app**: `npm run electron:dev`
+2.**Navigate to Fingerprint section** in the dashboard
+3.**Set service key**: Enter your key or leave empty for a free version
+4.**Fetch fingerprint**: Get a fresh fingerprint from the service
+
+- ⏳ **First time**: Wait for engine download (depends on internet speed, 800+ MB)
+- 📦 **Watch console**: Monitor download progress
+
+5.**Enter URL**: Any website (e.g., https://browserleaks.com/canvas)
+6.**Launch Chromium**: Watch the browser open with a modified fingerprint
+7.**Check console**: See detailed logging of the fingerprint process
 
 ## 📁 Project Structure
 

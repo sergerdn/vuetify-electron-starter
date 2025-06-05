@@ -90,7 +90,10 @@ export class AppConfig {
 
   // Playwright with Fingerprints Configuration
   public readonly playwrightFingerprints = {
-    workingFolder: env.get('PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER').default('.data_playwright_with_fingerprints').asString()
+    workingFolder: env
+      .get('PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER')
+      .default('.data_playwright_with_fingerprints')
+      .asString()
   };
 
   /**
