@@ -1,5 +1,5 @@
 <template>
-  <!-- Electron OS Integration Test (moved from HelloWorld) -->
+  <!-- Electron OS Integration Test -->
   <v-card class="py-4" color="primary" rounded="lg" variant="tonal">
     <v-card-title class="text-center">
       <v-icon class="me-2">mdi-desktop-classic</v-icon>
@@ -81,7 +81,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
 
-  // Electron integration reactive data (moved from HelloWorld)
+  // Electron integration reactive data
   const isElectron = ref(false);
   const loading = ref(false);
   const loadingInfo = ref(false);
@@ -89,7 +89,7 @@
   const systemInfo = ref<Record<string, string> | null>(null);
   const statusMessage = ref<{ type: 'success' | 'error' | 'warning'; text: string } | null>(null);
 
-  // Helper function to show status messages (moved from HelloWorld)
+  // Helper function to show status messages
   const showStatus = (type: 'success' | 'error' | 'warning', text: string) => {
     statusMessage.value = { type, text };
     setTimeout(() => {
@@ -97,7 +97,7 @@
     }, 5000);
   };
 
-  // OS Integration functions (moved from HelloWorld)
+  // OS Integration functions
   const openGoogleInChrome = async () => {
     if (!window.electronAPI) {
       showStatus('error', 'Electron API not available');
@@ -165,7 +165,7 @@
     }
   };
 
-  // Check if running in Electron on component mount (moved from HelloWorld)
+  // Check if running in Electron on the component mount
   onMounted(() => {
     isElectron.value = !!window.electronAPI?.isElectron;
 

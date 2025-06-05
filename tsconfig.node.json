@@ -7,7 +7,8 @@
     "nightwatch.conf.*",
     "playwright.config.*",
     "electron.vite.config.*",
-    "src/config/AppConfig.ts"
+    "src/config/AppConfig.ts",
+    "src/electron-main/**/*"
   ],
   "compilerOptions": {
     "composite": true,

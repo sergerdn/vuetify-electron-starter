@@ -39,7 +39,23 @@ contextBridge.exposeInMainWorld('electronAPI', {
   isElectron: true,
 
   // Get platform info
-  platform: process.platform
+  platform: process.platform,
+
+  // Playwright browser automation APIs
+  launchBrowser: (browser: 'chrome' | 'firefox', url: string) =>
+    ipcRenderer.invoke('launch-browser', browser, url),
+
+  // Get available browsers
+  getAvailableBrowsers: () => ipcRenderer.invoke('get-available-browsers'),
+
+  // Close the browser process
+  closeBrowser: (processId: number) => ipcRenderer.invoke('close-browser', processId),
+
+  // Get active browser sessions
+  getActiveSessions: () => ipcRenderer.invoke('get-active-sessions'),
+
+  // Get session details
+  getSessionDetails: (processId: number) => ipcRenderer.invoke('get-session-details', processId)
 });
 
 // --------- Preload scripts loading ---------

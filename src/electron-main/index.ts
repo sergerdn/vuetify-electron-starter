@@ -3,9 +3,13 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { exec } from 'node:child_process';
 import { AppConfig } from '../config/AppConfig.js';
+import { PlaywrightHandlers } from './handlers/PlaywrightHandlers.js';
 
 // Create config instance
 const appConfig = new AppConfig();
+
+// Initialize Playwright handlers
+let playwrightHandlers: PlaywrightHandlers;
 
 // Add command line switches before the app is ready
 app.commandLine.appendSwitch('--no-sandbox');
@@ -159,15 +163,25 @@ ipcMain.handle('show-notification', async (event, title: string, body: string) =
   }
 });
 
+// ========== Initialize Playwright Handlers ==========
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  // Initialize Playwright handlers
+  playwrightHandlers = new PlaywrightHandlers();
+
   createWindow();
 });
 
 // Quit when all windows are closed (Windows behavior)
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
+  // Clean up Playwright sessions before quitting
+  if (playwrightHandlers) {
+    await playwrightHandlers.cleanup();
+  }
+
   app.quit();
   win = null;
 });

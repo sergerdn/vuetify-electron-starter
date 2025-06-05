@@ -7,36 +7,37 @@ template combines the power of modern web technologies with native Windows deskt
 
 ### 🖥️ Desktop Application
 
-- **Electron** Latest stable version for Windows desktop apps
-- **electron-vite** Modern build tooling for Electron
-- **electron-builder** Complete solution to package and build Electron apps
-- **OS Integration** IPC communication between renderer and main process
-- **External Browser Control** Open URLs in Chrome or default browser
-- **Native Notifications** System-level notification support
-- **System Information API** Access to platform and version details
+- **Electron**: Latest stable version for Windows desktop apps
+- **electron-vite**: Modern build tooling for Electron
+- **electron-builder**: Complete solution to package and build Electron apps
+- **OS Integration**: IPC communication between renderer and main process
+- **Playwright Browser Automation**: Launch and control Chrome/Firefox browsers with CDP support
+- **External Browser Control**: Open URLs in Chrome or default browser
+- **Native Notifications**: System-level notification support
+- **System Information API**: Access to platform and version details
 
 ### 🚀 Modern Web Stack
 
-- **Vue.js 3** Progressive JavaScript framework with Composition API
-- **Vuetify 3** Material Design component framework
-- **Vite** Next generation frontend tooling
-- **TypeScript** Full TypeScript support throughout the project
-- **Pinia** - Intuitive state management for Vue
+- **Vue.js 3**: Progressive JavaScript framework with Composition API
+- **Vuetify 3**: Material Design component framework
+- **Vite**: Next generation frontend tooling
+- **TypeScript**: Full TypeScript support throughout the project
+- **Pinia**: Intuitive state management for Vue
 
 ### 🧪 Testing & Quality
 
-- **Vitest** Fast unit testing framework
-- **Cypress** End-to-end testing framework
-- **ESLint** Code linting and formatting
-- **Auto-imports** - Automatic imports for Vue and utilities
+- **Vitest**: Fast unit testing framework
+- **Cypress**: End-to-end testing framework
+- **ESLint**: Code linting and formatting
+- **Auto-imports**: Automatic imports for Vue and utilities
 
 ### 🔧 Development Experience
 
-- **Hot Module Replacement** - Instant updates during development
-- **DevTools Integration** - Built-in debugging capabilities
+- **Hot Module Replacement**: Instant updates during development
+- **DevTools Integration**: Built-in debugging capabilities
 - **Modern Security** Context isolation and secure preload scripts
-- **Auto-updater Ready** - Built-in support for application updates (optional)
-- **Icon Integration** - Automatic Windows icon support with a build process
+- **Auto-updater Ready**: Built-in support for application updates (planned)
+- **Icon Integration**: Automatic Windows icon support with a build process
 
 ## Prerequisites
 
@@ -130,34 +131,225 @@ Run E2E tests:
 npm run test:e2e
 ```
 
+## 🤖 Playwright Browser Automation
+
+This application includes a powerful Playwright integration that allows you to launch and control Chrome and Firefox
+browsers with full automation capabilities.
+
+### Features
+
+- **Browser Selection**: Choose between Chrome and Firefox
+- **URL Navigation**: Enter any URL to navigate to
+- **CDP Integration**: Chrome DevTools Protocol support for external automation tools
+- **Session Management**: Track and manage multiple browser sessions
+- **System Browser Integration**: Uses your installed Chrome/Firefox, not bundled browsers
+
+### How to Use
+
+1. **Start the Electron app**: `npm run electron:dev`
+2. **Navigate to Dashboard**: The main application window
+3. **Find Playwright Section**: "Playwright Browser Automation" component
+4. **Select Browser**: Choose Chrome or Firefox from the dropdown
+5. **Enter URL**: Type the website URL (e.g., https://google.com)
+6. **Launch Browser**: Click "Launch Chrome" or "Launch Firefox"
+
+### Visual Indicators
+
+When Playwright successfully launches a browser, you'll see:
+
+- **Chrome**: Yellow banner "Chrome is being controlled by automated test software"
+- **Firefox**: Similar automation warning banner
+- **Console Logs**: Detailed logging in the Electron console showing:
+  ```
+  🚀 Launching chrome with Playwright automation for URL: https://google.com
+  📊 CDP Port: 9222
+  🌐 Navigating to: https://google.com
+  ✅ Browser launched successfully!
+     Browser: chrome (Chrome/xxx.x.xxxx.xxx)
+     User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)...
+     Automation Mode: Headed
+     CDP Port: 9222
+     Process ID: 1
+  🎯 chrome ready for automation - Process ID: 1, CDP: http://localhost:9222
+  ```
+
+### CDP (Chrome DevTools Protocol) Access
+
+Each launched browser provides a CDP endpoint for external automation tools:
+
+- **Chrome**: `http://localhost:9222` (or next available port)
+- **Firefox**: `http://localhost:9223` (or next available port)
+- **External Tools**: Connect Puppeteer, Selenium, or other automation tools to these endpoints
+
+### Architecture
+
+The Playwright integration uses a modular architecture:
+
+```
+src/electron-main/
+├── services/
+│   └── PlaywrightService.ts     # Core automation logic
+├── handlers/
+│   └── PlaywrightHandlers.ts    # IPC communication layer
+└── index.ts                     # Main process integration
+```
+
+This design will allow for easy extension with additional automation APIs in the future.
+
+### Quick Start with Playwright
+
+1. **Launch the app**: `npm run electron:dev`
+2. **Navigate to Playwright section** in the dashboard
+3. **Select browser**: Chrome or Firefox
+4. **Enter URL**: Any website (e.g., https://google.com)
+5. **Click Launch**: Watch the browser open with the automation banner
+6. **Check console**: See detailed logging of the automation process
+
+### Build Configuration for Playwright
+
+The application includes special build configuration to ensure Playwright works correctly in the packaged Electron app:
+
+```json
+{
+  "asarUnpack": [
+    "**/node_modules/playwright/**/*"
+  ]
+}
+```
+
+> 📖 **Reference
+**: [Electron Builder - asarUnpack Configuration](https://www.electron.build/configuration.html#asarunpack)
+
+**Why this is needed:**
+
+- **ASAR Packaging**: Electron packages files into ASAR archives for performance
+- **Binary Executables**: Playwright includes browser binaries that must be executable
+- **File System Access**: Playwright needs direct file system access to launch browsers
+- **Native Dependencies**: Some Playwright modules require unpacked access
+
+**What happens without `asarUnpack`:**
+
+```javascript
+// ❌ This would fail in packaged app:
+const browser = await playwright.chromium.launch();
+// Error: Cannot find browser executable
+```
+
+**What happens with `asarUnpack`:**
+
+```javascript
+// ✅ This works in packaged app:
+const browser = await playwright.chromium.launch();
+// Browser launches successfully from unpacked files
+```
+
+### Platform-Specific Dependencies
+
+The build configuration also excludes platform-specific dependencies that aren't needed on Windows:
+
+```json5
+{
+  "files": [
+    // macOS file system events
+    "!**/node_modules/fsevents/**/*",
+    // macOS file watcher
+    "!**/node_modules/@parcel/watcher-darwin*/**/*",
+    // macOS esbuild binaries
+    "!**/node_modules/@esbuild/darwin*/**/*",
+    // Linux esbuild binaries
+    "!**/node_modules/@esbuild/linux*/**/*"
+  ]
+}
+```
+
+This prevents build errors and reduces the final package size by excluding unnecessary platform-specific files.
+
+## 📸 Screenshots
+
+![Vuetify Electron Starter - Main Window Playwright](docs/screenshots/main_playwright.png)
+
+![Vuetify Electron Starter - Main Window Electron](docs/screenshots/main_window_electron.png)
+
 ## 📁 Project Structure
 
 ```
-├── public/                     # Static assets
-├── src/                        # Source code
-│   ├── electron-main/          # Electron main process (Windows-focused)
-│   │   └── index.ts           # Main process entry point
-│   ├── electron-preload/       # Electron preload scripts
-│   │   ├── index.ts           # Preload script
-│   │   └── types.d.ts         # TypeScript definitions
-│   ├── components/            # Vue components
-│   ├── layouts/               # Page layouts
-│   ├── pages/                 # Application pages
-│   ├── plugins/               # Vue plugins
-│   ├── router/                # Vue Router configuration
-│   └── stores/                # Pinia stores
-├── tests/                     # Test files
-│   ├── e2e/                   # End-to-end tests (Cypress)
-│   └── unit/                  # Unit tests (Vitest)
-├── build-electron/            # Compiled Electron files
-│   ├── electron-main/         # Compiled main process
-│   ├── electron-preload/      # Compiled preload scripts
-│   └── renderer/              # Compiled renderer (Vue app)
-├── dist-electron/             # Built Windows application
-├── build-resources/           # Build assets (icons, etc.)
-├── electron.vite.config.ts    # Electron-Vite configuration
-├── vite.config.ts             # Vite configuration
-└── package.json               # Dependencies and scripts
+├── public/                           # Static assets
+│   └── favicon.ico                   # Application favicon
+├── src/                              # Source code
+│   ├── electron-main/                # Electron main process (Windows-focused)
+│   │   ├── services/                 # Business logic services
+│   │   │   └── PlaywrightService.ts  # Playwright automation service
+│   │   ├── handlers/                 # IPC communication handlers
+│   │   │   └── PlaywrightHandlers.ts # Playwright IPC handlers
+│   │   └── index.ts                  # Main process entry point
+│   ├── electron-preload/             # Electron preload scripts
+│   │   ├── index.ts                  # Preload script
+│   │   └── types.d.ts                # TypeScript definitions
+│   ├── components/                   # Vue components
+│   ├── layouts/                      # Page layouts
+│   ├── pages/                        # Application pages
+│   ├── plugins/                      # Vue plugins
+│   ├── router/                       # Vue Router configuration
+│   ├── stores/                       # Pinia stores
+│   ├── styles/                       # Global styles and Vuetify settings
+│   ├── utils/                        # Utility functions
+│   ├── config/                       # Configuration management
+│   ├── auto-imports.d.ts             # Auto-generated import types
+│   ├── components.d.ts               # Auto-generated component types
+│   ├── typed-router.d.ts             # Auto-generated router types
+│   ├── App.vue                       # Root Vue component
+│   └── main.ts                       # Application entry point
+├── tests/                            # Comprehensive test suite
+│   ├── setup.ts                      # Global test setup and utilities
+│   ├── unit/                         # Unit and component tests (Vitest)
+│   │   ├── components/               # Vue component tests
+│   │   └── config/                   # Configuration unit tests
+│   ├── integration/                  # Integration tests (Vitest)
+│   │   └── config_integration.spec.ts # Configuration integration tests
+│   ├── e2e/                          # End-to-end tests (Cypress)
+│   │   ├── fixtures/                 # Test data for E2E tests
+│   │   ├── support/                  # Cypress support files
+│   │   ├── screenshots/              # Test screenshots (auto-generated)
+│   │   ├── videos/                   # Test videos (auto-generated)
+│   │   └── home.cy.js                # Sample E2E test
+│   ├── fixtures/                     # Shared test fixtures
+│   │   └── env_files.ts              # Environment file fixtures
+│   └── helpers/                      # Test helper utilities
+│       └── config_helpers.ts         # Configuration test helpers
+├── docs/                             # Documentation
+│   └── screenshots/                  # Application screenshots
+├── build-electron/                   # Compiled Electron files (auto-generated)
+│   ├── electron-main/                # Compiled main process
+│   ├── electron-preload/             # Compiled preload scripts
+│   └── renderer/                     # Compiled renderer (Vue app)
+├── dist-electron/                    # Built Windows application (auto-generated)
+│   ├── win-unpacked/                 # Unpacked Windows application
+│   ├── builder-debug.yml             # Electron builder debug info
+│   └── builder-effective-config.yaml # Effective build configuration
+├── build-resources/                  # Build assets (icons, etc.)
+│   ├── README.md                     # Icon and build resources guide
+│   ├── v-logo.ico                    # Windows application icon
+│   └── v-logo.svg                    # SVG source icon
+├── scripts/                          # Build and utility scripts
+├── node_modules/                     # Dependencies (auto-generated)
+├── .env.production                   # Production environment variables (in git)
+├── .env.development                  # Development environment variables (not in git)
+├── .env.development.example          # Development environment template
+├── CONFIG.md                         # Configuration documentation
+├── electron.vite.config.ts           # Electron-Vite configuration
+├── vite.config.mts                   # Vite configuration with test setup
+├── cypress.config.cjs                # Cypress E2E test configuration
+├── eslint.config.js                  # ESLint configuration
+├── tsconfig.json                     # TypeScript configuration (main)
+├── tsconfig.app.json                 # TypeScript configuration (app)
+├── tsconfig.node.json                # TypeScript configuration (Node.js)
+├── tsconfig.preload.json             # TypeScript configuration (preload)
+├── package.json                      # Dependencies and scripts
+├── package-lock.json                 # Dependency lock file
+├── index.html                        # HTML entry point
+├── env.d.ts                          # Environment type definitions
+├── Makefile                          # Development automation tasks
+└── README.md                         # Project documentation
 ```
 
 ## 🔧 Configuration Files
@@ -175,21 +367,46 @@ npm run test:e2e
 
 ## 📋 Available Scripts
 
-| Script                     | Description                                |
-|----------------------------|--------------------------------------------|
-| `npm run dev`              | Start web development server               |
-| `npm run build`            | Build web application for production       |
-| `npm run preview`          | Preview built web application              |
-| `npm run electron:dev`     | Start Electron in development mode         |
-| `npm run electron:build`   | Build complete Electron application        |
-| `npm run electron:preview` | Preview built Electron application         |
-| `npm run test`             | Run unit tests with Vitest                 |
-| `npm run test:e2e`         | Run end-to-end tests with Cypress          |
-| `npm run test:e2e:open`    | Open Cypress test runner                   |
-| `npm run test:all`         | Run all tests (unit + e2e)                 |
-| `npm run lint`             | Lint code with ESLint                      |
-| `npm run type-check`       | Check TypeScript types                     |
-| `npm run ci`               | Run all checks (lint + type-check + tests) |
+### Development
+
+| Script                     | Description                          |
+|----------------------------|--------------------------------------|
+| `npm run dev`              | Start web development server         |
+| `npm run build`            | Build web application for production |
+| `npm run preview`          | Preview built web application        |
+| `npm run electron:dev`     | Start Electron in development mode   |
+| `npm run electron:build`   | Build complete Electron application  |
+| `npm run electron:preview` | Preview built Electron application   |
+| `npm run electron:pack`    | Pack Electron app without installer  |
+
+### Testing
+
+| Script                  | Description                              |
+|-------------------------|------------------------------------------|
+| `npm run test`          | Run unit and integration tests (Vitest)  |
+| `npm run test:watch`    | Run tests in watch mode                  |
+| `npm run test:coverage` | Generate test coverage report            |
+| `npm run test:e2e`      | Run end-to-end tests with Cypress        |
+| `npm run test:e2e:open` | Open Cypress test runner                 |
+| `npm run test:all`      | Run all tests (unit + integration + e2e) |
+
+### Code Quality
+
+| Script                 | Description                         |
+|------------------------|-------------------------------------|
+| `npm run lint`         | Lint code with ESLint               |
+| `npm run lint:fix`     | Fix ESLint issues automatically     |
+| `npm run format`       | Format code with Prettier           |
+| `npm run format:check` | Check code formatting               |
+| `npm run format:all`   | Format all files including markdown |
+| `npm run lint:format`  | Run lint fix + format together      |
+| `npm run type-check`   | Check TypeScript types              |
+
+### CI/CD
+
+| Script       | Description                                |
+|--------------|--------------------------------------------|
+| `npm run ci` | Run all checks (lint + type-check + tests) |
 
 ## 🛠️ Development Tips
 
@@ -255,9 +472,9 @@ Electron applications run using the `file://` protocol, which has important impl
 
 **🔧 Router Configuration:**
 
-- **Development**: Uses `createWebHistory` (works with Vite dev server)
-- **Production**: Automatically switches to `createWebHashHistory` for `file://` compatibility
-- **URLs**: Production URLs will have a hash format: `file:///path/to/app/index.html#/route`
+- **Development** Uses `createWebHistory` (works with Vite dev server)
+- **Production** Automatically switches to `createWebHashHistory` for `file://` compatibility
+- **URLs** Production URLs will have a hash format: `file:///path/to/app/index.html#/route`
 
 **📁 File Protocol Limitations:**
 
