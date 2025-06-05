@@ -53,9 +53,8 @@ copy_fingerprints_to_electron_package:
 # Create distribution package only
 archive_electron_package:
 		VERSION=$$(jq -r .version package.json) && \
-		7z a -tzip -mx=1 \
-			"./dist-electron/$$VERSION/VuetifyElectronStarter-$$VERSION-x64.zip" \
-			"./dist-electron/$$VERSION/win-unpacked/*"
+		powershell Compress-Archive -Force -Path "./dist-electron/$$VERSION/win-unpacked/*" \
+			-DestinationPath "./dist-electron/$$VERSION/VuetifyElectronStarter-$$VERSION-x64.zip"
 
 
 # ----------------------------------------------------------------------------
