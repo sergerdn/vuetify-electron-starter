@@ -6,6 +6,12 @@ clean:
 		if [ -d "dist-electron" ]; then rm -rf dist-electron; fi
 		if [ -d "coverage" ]; then rm -rf coverage; fi
 		if [ -d "build-electron" ]; then rm -rf build-electron; fi
+		$(MAKE) ensure_fsevents_dir
+
+ensure_fsevents_dir:
+	if [ ! -d "./node_modules/playwright/node_modules/fsevents" ]; then \
+		mkdir -p "./node_modules/playwright/node_modules/fsevents"; \
+	fi
 
 switch_develop:
 		git fetch && git checkout develop && git pull
@@ -18,6 +24,7 @@ format_and_lint:
 
 clean_electron_build:
 		$(MAKE) clean
+		npm run build-only
 		$(MAKE) electron_build
 
 electron_build:

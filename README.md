@@ -114,7 +114,15 @@ This will:
 **Output:**
 
 - `dist-electron/win-unpacked/` - Unpacked Windows application folder
-- `dist-electron/win-unpacked/Vuetify Electron Starter.exe` - Windows executable with custom icon
+- `dist-electron/win-unpacked/VuetifyElectronStarter.exe` - Windows executable with custom icon
+
+**Windows Build Fix:**
+
+Create this directory before building to avoid fsevents errors:
+
+```bash
+mkdir ./node_modules/playwright/node_modules/fsevents
+```
 
 ### Preview Built Application
 
