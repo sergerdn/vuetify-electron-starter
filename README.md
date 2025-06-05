@@ -4,6 +4,12 @@ A modern starter template for building Windows desktop applications with `Vue.js
 
 This template combines the power of modern web technologies with native Windows desktop capabilities.
 
+**Main goal: Create Windows app that can automate browsers**: This is a proof-of-concept demonstrating browser
+automation technologies including standard Playwright and advanced fingerprint automation with
+`playwright-with-fingerprints`.
+
+It shows working integrations, but it works!
+
 ## 📸 Screenshots
 
 ![Vuetify Electron Starter - Main Window Playwright With Fingerprints](docs/screenshots/main_playwright-with-fingerprints.png)
@@ -127,14 +133,6 @@ Create this directory before building to avoid fsevents errors:
 mkdir ./node_modules/playwright/node_modules/fsevents
 ```
 
-**Windows Build Fix:**
-
-Create this directory before building to avoid fsevents errors:
-
-```bash
-mkdir ./node_modules/playwright/node_modules/fsevents
-```
-
 ### Preview Built Application
 
 Preview the built Electron application:
@@ -157,247 +155,68 @@ Run E2E tests:
 npm run test:e2e
 ```
 
-## 🤖 Playwright Browser Automation
+## 🎭 Fingerprint Browser Automation
 
-This application includes a powerful Playwright integration that allows you to launch and control Chrome and Firefox
-browsers with full automation capabilities.
+**Advanced stealth automation** using `playwright-with-fingerprints` for enhanced privacy and detection avoidance.
+
+### Key Features
+
+- **Enhanced Privacy**: Modified browser fingerprints for stealth automation
+- **Service Integration**: Free and premium fingerprint service support
+- **Windows Optimized**: Specifically designed for Windows environments
+- **Chromium Engine**: Uses Chromium with fingerprint modifications
+
+### How It Works
+
+1. **Set Service Key**: Enter your fingerprint service key (optional for free tier)
+2. **Fetch Fingerprint**: Get a fresh fingerprint with Windows/Chrome tags
+3. **Launch Browser**: Start Chromium with the applied fingerprint
+4. **Stealth Browsing**: Browse websites with modified fingerprint data
+
+### First-Time Setup
+
+⚠️ **Important**: On first launch, the fingerprint engine downloads (800+ MB)
+
+- **Download Time**: Depends on internet speed
+- **Storage**: `.data_playwright_with_fingerprints` directory
+- **One-Time**: Subsequent launches are instant
+
+### Testing Fingerprints
+
+Visit fingerprint testing sites to verify the modifications:
+
+- `https://browserleaks.com/canvas`
+- `https://fingerprint.com/demo`
+- `https://amiunique.org`
+
+## 🌐 Standard Browser Automation
+
+**Multi-browser automation** with Chrome and Firefox support for general automation tasks.
 
 ### Features
 
-- **Browser Selection**: Choose between Chrome and Firefox
-- **URL Navigation**: Enter any URL to navigate to
-- **CDP Integration**: Chrome DevTools Protocol support for external automation tools
-- **Session Management**: Track and manage multiple browser sessions
-- **System Browser Integration**: Uses your installed Chrome/Firefox, not bundled browsers
+- **Browser Choice**: Chrome or Firefox selection
+- **CDP Integration**: Chrome DevTools Protocol for external tools
+- **Session Management**: Multiple browser instances
+- **System Integration**: Uses your installed browsers
 
-### How to Use
+### CDP Access
 
-1. **Start the Electron app**: `npm run electron:dev`
-2. **Navigate to Dashboard**: The main application window
-3. **Find Playwright Section**: "Playwright Browser Automation" component
-4. **Select Browser**: Choose Chrome or Firefox from the dropdown
-5. **Enter URL**: Type the website URL (e.g., https://google.com)
-6. **Launch Browser**: Click "Launch Chrome" or "Launch Firefox"
+Each browser provides automation endpoints:
+
+- **Chrome**: `http://localhost:9222`
+- **Firefox**: `http://localhost:9223`
+- **External Tools**: Connect Puppeteer, Selenium, or other automation frameworks
 
 ### Visual Indicators
 
-When Playwright successfully launches a browser, you'll see:
+- **Chrome**: "Chrome is being controlled by automated test software" banner
+- **Firefox**: Similar automation warning
+- **Console Logs**: Detailed process information and CDP endpoints
 
-- **Chrome**: Yellow banner "Chrome is being controlled by automated test software"
-- **Firefox**: Similar automation warning banner
-- **Console Logs**: Detailed logging in the Electron console showing:
-  ```
-  🚀 Launching chrome with Playwright automation for URL: https://google.com
-  📊 CDP Port: 9222
-  🌐 Navigating to: https://google.com
-  ✅ Browser launched successfully!
-     Browser: chrome (Chrome/xxx.x.xxxx.xxx)
-     User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)...
-     Automation Mode: Headed
-     CDP Port: 9222
-     Process ID: 1
-  🎯 chrome ready for automation - Process ID: 1, CDP: http://localhost:9222
-  ```
+## 🏗️ Technical Architecture
 
-### CDP (Chrome DevTools Protocol) Access
-
-Each launched browser provides a CDP endpoint for external automation tools:
-
-- **Chrome**: `http://localhost:9222` (or next available port)
-- **Firefox**: `http://localhost:9223` (or next available port)
-- **External Tools**: Connect Puppeteer, Selenium, or other automation tools to these endpoints
-
-### Architecture
-
-The Playwright integration uses a modular architecture:
-
-```
-src/electron-main/
-├── services/
-│   └── PlaywrightService.ts     # Core automation logic
-├── handlers/
-│   └── PlaywrightHandlers.ts    # IPC communication layer
-└── index.ts                     # Main process integration
-```
-
-This design will allow for easy extension with additional automation APIs in the future.
-
-### Quick Start with Playwright
-
-1. **Launch the app**: `npm run electron:dev`
-2. **Navigate to Playwright section** in the dashboard
-3. **Select browser**: Chrome or Firefox
-4. **Enter URL**: Any website (e.g., https://google.com)
-5. **Click Launch**: Watch the browser open with the automation banner
-6. **Check console**: See detailed logging of the automation process
-
-### Build Configuration for Playwright
-
-The application includes special build configuration to ensure Playwright works correctly in the packaged Electron app:
-
-```json
-{
-  "asarUnpack": [
-    "**/node_modules/playwright/**/*"
-  ]
-}
-```
-
-> 📖 **Reference
-**: [Electron Builder - asarUnpack Configuration](https://www.electron.build/configuration.html#asarunpack)
-
-**Why this is needed:**
-
-- **ASAR Packaging**: Electron packages files into ASAR archives for performance
-- **Binary Executables**: Playwright includes browser binaries that must be executable
-- **File System Access**: Playwright needs direct file system access to launch browsers
-- **Native Dependencies**: Some Playwright modules require unpacked access
-
-**What happens without `asarUnpack`:**
-
-```javascript
-// ❌ This would fail in packaged app:
-const browser = await playwright.chromium.launch();
-// Error: Cannot find browser executable
-```
-
-**What happens with `asarUnpack`:**
-
-```javascript
-// ✅ This works in packaged app:
-const browser = await playwright.chromium.launch();
-// Browser launches successfully from unpacked files
-```
-
-### Platform-Specific Dependencies
-
-The build configuration also excludes platform-specific dependencies that aren't needed on Windows:
-
-```json5
-{
-  "files": [
-    // macOS file system events
-    "!**/node_modules/fsevents/**/*",
-    // macOS file watcher
-    "!**/node_modules/@parcel/watcher-darwin*/**/*",
-    // macOS esbuild binaries
-    "!**/node_modules/@esbuild/darwin*/**/*",
-    // Linux esbuild binaries
-    "!**/node_modules/@esbuild/linux*/**/*"
-  ]
-}
-```
-
-This prevents build errors and reduces the final package size by excluding unnecessary platform-specific files.
-
-## 🔒 Fingerprint Browser Automation
-
-This application includes advanced fingerprint browser automation using the `playwright-with-fingerprints` library for
-enhanced privacy and stealth automation.
-
-### Features
-
-- **Enhanced Privacy**: Launch browsers with modified fingerprints for stealth automation
-- **Windows-Only**: Optimized for a Windows operating system
-- **Chromium Support**: Uses Chromium browser with fingerprint modifications
-- **Service Key Support**: Free and premium service key options
-- **Custom Working Folder**: Configurable engine data storage location
-
-### How to Use
-
-1. **Start the Electron app**: `npm run electron:dev`
-2. **Navigate to Dashboard**: The main application window
-3. **Find Fingerprint Section**: "Fingerprint Browser Automation" component
-4. **Set Service Key**: Enter your service key (leave empty for a free version)
-5. **Fetch Fingerprint**: Click "Fetch New Fingerprint" to get a fresh fingerprint
-
-- ⚠️ **First time**: Engine download may take time (depends on internet speed, 800+ MB)
-- ✅ **Subsequent uses**: Instant fingerprint fetching
-
-6. **Enter URL**: Type the website URL (e.g., https://browserleaks.com/canvas)
-7. **Launch Browser**: Click "Launch Chromium with Fingerprint"
-
-### Configuration
-
-The fingerprint service uses environment variables for configuration:
-
-```bash
-# Playwright with Fingerprints
-# Note: On first launch, the engine will be downloaded to this folder (may take some time)
-PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
-```
-
-### First Launch
-
-⚠️ **Important**: On the first launch of fingerprint automation, the `playwright-with-fingerprints` engine will be
-downloaded to the configured working folder.
-
-This process:
-
-- **Download Size**: Over 800 MB (Chromium engine with fingerprint modifications)
-- **Download Time**: Depends on internet speed
-- **Console Message**: You'll see "The browser is downloading. This may take some time."
-- **Storage Location**: Files are stored in `.data_playwright_with_fingerprints` (or your configured folder)
-- **One-Time Process**: Subsequent launches will use the cached engine and start immediately
-
-**What to expect during the first launch:**
-
-```
-🎭 Fetching fingerprint with tags: ['Microsoft Windows', 'Chrome']
-The browser is downloading - this may take some time.
-📦 Downloading engine to: F:\WebstormProjects\vuetify-electron-starter\.data_playwright_with_fingerprints
-⏳ Please wait while the fingerprint engine is being prepared...
-✅ Engine download completed successfully!
-🚀 Launching Chromium with fingerprint...
-```
-
-**Note**: The service uses `launchPersistentContext` method as recommended by the playwright-with-fingerprints library (
-the original `launch` method is temporarily unsupported). Each browser session uses a unique temporary directory in the
-system temp folder for user data, which is automatically cleaned up when the session is closed.
-
-> 📖 **Reference
-**: [playwright-with-fingerprints Documentation](https://github.com/CheshireCaat/playwright-with-fingerprints)
-
-### Build Configuration for Fingerprint Automation
-
-The application includes special build configuration to ensure playwright-with-fingerprints works correctly:
-
-```json
-{
-  "asarUnpack": [
-    "**/node_modules/playwright/**/*",
-    "**/node_modules/playwright-with-fingerprints/**/*"
-  ]
-}
-```
-
-### Architecture
-
-The fingerprint integration uses a modular architecture:
-
-```
-src/electron-main/
-├── services/
-│   └── FingerprintPlaywrightService.ts  # Fingerprint automation logic
-└── handlers/
-    └── FingerprintPlaywrightHandlers.ts # Fingerprint IPC handlers
-```
-
-### Testing Fingerprint Automation
-
-1.**Launch the app**: `npm run electron:dev`
-2.**Navigate to Fingerprint section** in the dashboard
-3.**Set service key**: Enter your key or leave empty for a free version
-4.**Fetch fingerprint**: Get a fresh fingerprint from the service
-
-- ⏳ **First time**: Wait for engine download (depends on internet speed, 800+ MB)
-- 📦 **Watch console**: Monitor download progress
-
-5.**Enter URL**: Any website (e.g., https://browserleaks.com/canvas)
-6.**Launch Chromium**: Watch the browser open with a modified fingerprint
-7.**Check console**: See detailed logging of the fingerprint process
-
-## 📁 Project Structure
+### Project Structure
 
 ```
 ├── public/                           # Static assets
@@ -415,6 +234,10 @@ src/electron-main/
 │   │   ├── index.ts                  # Preload script
 │   │   └── types.d.ts                # TypeScript definitions
 │   ├── components/                   # Vue components
+│   │   ├── PlaywrightIntegration.vue # Standard browser automation UI
+│   │   ├── FingerprintPlaywrightIntegration.vue # Fingerprint automation UI
+│   │   ├── ElectronIntegration.vue   # Desktop integration UI
+│   │   └── Dashboard.vue             # Main dashboard component
 │   ├── layouts/                      # Page layouts
 │   ├── pages/                        # Application pages
 │   ├── plugins/                      # Vue plugins
@@ -481,32 +304,62 @@ src/electron-main/
 └── README.md                         # Project documentation
 ```
 
-## 🔧 Configuration Files
-
-### Electron Configuration
-
-- **`electron.vite.config.ts`** - Main configuration for electron-vite build tool
-- **`src/electron-main/index.ts`** - Electron main process with Windows-focused functionality
-- **`src/electron-preload/index.ts`** - Secure preload script for renderer communication
-
 ### Build Configuration
 
-- **`vite.config.ts`** - Vite configuration for the renderer process
-- **`package.json`** - Contains electron-builder configuration and scripts
+**Windows-Specific Build**:
+
+```json
+{
+  "win": {
+    "target": "dir",
+    "arch": [
+      "x64"
+    ],
+    "icon": "build-resources/v-logo.ico"
+  }
+}
+```
+
+**Automation Libraries Unpacking**:
+
+```json
+{
+  "asarUnpack": [
+    "**/node_modules/playwright/**/*",
+    "**/node_modules/playwright-with-fingerprints/**/*"
+  ]
+}
+```
+
+### Environment Configuration
+
+```bash
+# Development environment (.env.development)
+NODE_ENV=development
+PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
+
+# Production environment (.env.production)
+NODE_ENV=production
+PLAYWRIGHT_FINGERPRINTS_WORKING_FOLDER=.data_playwright_with_fingerprints
+```
 
 ## 📋 Available Scripts
 
 ### Development
 
-| Script                     | Description                          |
-|----------------------------|--------------------------------------|
-| `npm run dev`              | Start web development server         |
-| `npm run build`            | Build web application for production |
-| `npm run preview`          | Preview built web application        |
-| `npm run electron:dev`     | Start Electron in development mode   |
-| `npm run electron:build`   | Build complete Electron application  |
-| `npm run electron:preview` | Preview built Electron application   |
-| `npm run electron:pack`    | Pack Electron app without installer  |
+| Script                     | Description                        |
+|----------------------------|------------------------------------|
+| `npm run dev`              | Start web development server       |
+| `npm run electron:dev`     | Start Electron in development mode |
+| `npm run electron:preview` | Preview built Electron application |
+
+### Building
+
+| Script                   | Description                          |
+|--------------------------|--------------------------------------|
+| `npm run build`          | Build web application for production |
+| `npm run electron:build` | Build complete Electron application  |
+| `npm run electron:pack`  | Pack Electron app without installer  |
 
 ### Testing
 
@@ -536,6 +389,74 @@ src/electron-main/
 | Script       | Description                                |
 |--------------|--------------------------------------------|
 | `npm run ci` | Run all checks (lint + type-check + tests) |
+
+## ⚠️ Important Notes
+
+### Windows Build Requirements
+
+Create this directory before building to avoid fsevents errors:
+
+```bash
+mkdir ./node_modules/playwright/node_modules/fsevents
+```
+
+### First Launch Considerations
+
+- **Fingerprint Engine**: 800+ MB download on first use
+- **Internet Required**: Initial setup requires internet connection
+- **Storage Space**: Ensure adequate disk space for automation engines
+
+### Security & Detection
+
+- **Automation Banners**: Browsers show automation warnings
+- **Fingerprint Modifications**: Enhanced stealth with fingerprint automation
+- **CDP Endpoints**: External tools can connect to automation sessions
+
+## 📸 Screenshots
+
+![Fingerprint Browser Automation](docs/screenshots/main_playwright-with-fingerprints.png)
+*Advanced fingerprint automation with stealth capabilities*
+
+![Standard Browser Automation](docs/screenshots/main_playwright.png)
+*Multi-browser automation with Chrome and Firefox support*
+
+![Desktop Integration](docs/screenshots/main_window_electron.png)
+*Native Windows desktop application interface*
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**❌ Black screen in production build**
+
+- Ensure hash history is enabled for `file://` protocol
+- Check console for JavaScript errors
+- Verify all assets are loading correctly
+
+**❌ Fingerprint engine download fails**
+
+- Check internet connection
+- Ensure adequate disk space (800+ MB)
+- Verify firewall/antivirus isn't blocking download
+
+**❌ Browser automation not working**
+
+- Confirm Chrome/Firefox is installed
+- Check if browsers are already running
+- Verify CDP ports aren't blocked
+
+**❌ Windows build errors**
+
+- Create fsevents directory: `mkdir ./node_modules/playwright/node_modules/fsevents`
+- Ensure Node.js v22+ is installed
+- Check Windows build tools are available
+
+### Getting Help
+
+1. **Check Console**: Look for error messages in the Electron console
+2. **Verify Environment**: Ensure development mode works (`npm run electron:dev`)
+3. **Test Components**: Try each automation feature individually
+4. **Review Logs**: Check detailed logging for automation processes
 
 ## 🛠️ Development Tips
 
@@ -633,41 +554,6 @@ Electron applications run using the `file://` protocol, which has important impl
 - **Production**: Loads from local files (`file://` protocol)
 - **Router**: Automatically adapts history mode based on the environment
 - **DevTools**: Available in development, disabled in production builds
-
-## 🔧 Troubleshooting
-
-### Black Screen in Production
-
-If you see a black screen when running the built Electron app:
-
-1. **Check Router History Mode**: Ensure hash history is being used for `file://` protocol
-2. **Verify File Paths**: Check that all assets are loading correctly
-3. **Console Errors**: Open DevTools in development to check for JavaScript errors
-4. **Font Loading**: Ensure font preload links are properly configured
-
-### Common Issues
-
-**❌ "Failed to fetch dynamically imported module"**
-
-- **Cause**: Network issues or incorrect base URL
-- **Solution**: The router includes automatic retry logic for this issue
-
-**❌ Font preload warnings**
-
-- **Cause**: Invalid MIME types or CORS issues with `file://` protocol
-- **Solution**: Router hash history resolves most compatibility issues
-
-**❌ Routing not working**
-
-- **Cause**: HTML5 History API incompatible with `file://` protocol
-- **Solution**: Hash history automatically enabled in production builds
-
-### Getting Help
-
-1. Check the console for error messages
-2. Verify that development mode works (`npm run electron:dev`)
-3. Compare behavior between web and Electron versions
-4. Review the Electron security documentation
 
 ## 🤝 Contributing
 
