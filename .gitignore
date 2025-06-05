@@ -33,3 +33,4 @@ pnpm-debug.log*
 !/tests/e2e/videos/.gitkeep
 /data/
 /.data_playwright_with_fingerprints/
+/forum.md
